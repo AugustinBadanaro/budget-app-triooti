@@ -45,7 +45,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
             date__year=today.year,
             date__month=today.month
         ).aggregate(total=models.Sum('amount'))['total'] or 0
-        transaction.budget_percentage = round((total_spent / float(budget.limit_amount)) * 100, 1)
+        transaction.budget_percentage = round((float(total_spent) / float(budget.limit_amount)) * 100, 1)
 
 
 class BudgetViewSet(viewsets.ModelViewSet):
