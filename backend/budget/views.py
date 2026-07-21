@@ -1,6 +1,8 @@
 from rest_framework import viewsets, permissions
 from .models import Category, Transaction, Budget, UserProfile
 from .serializers import CategorySerializer, TransactionSerializer, BudgetSerializer, UserProfileSerializer
+from datetime import date
+from django.db import models
 
 class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
@@ -21,7 +23,29 @@ class TransactionViewSet(viewsets.ModelViewSet):
         return Transaction.objects.filter(user=self.request.user).order_by('-date')
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        transaction = serializer.save(user=self.request.user)
+        self.check_budget(transaction)
+
+    def check_budget(self, transaction):
+        if transaction.type != 'expense':
+            return
+        today = transaction.date
+        budget = Budget.objects.filter(
+            user=transaction.user,
+            category=transaction.category,
+            month__year=today.year,
+            month__month=today.month
+        ).first()
+        if not budget:
+            return
+        total_spent = Transaction.objects.filter(
+            user=transaction.user,
+            category=transaction.category,
+            type='expense',
+            date__year=today.year,
+            date__month=today.month
+        ).aggregate(total=models.Sum('amount'))['total'] or 0
+        transaction.budget_percentage = round((total_spent / float(budget.limit_amount)) * 100, 1)
 
 
 class BudgetViewSet(viewsets.ModelViewSet):
