@@ -34,7 +34,22 @@ class TransactionSerializer(serializers.ModelSerializer):
             date__year=obj.date.year, date__month=obj.date.month
         ).aggregate(total=models.Sum('amount'))['total'] or 0
         percentage = round((float(total) / float(budget.limit_amount)) * 100, 1)
-        return {'limit': float(budget.limit_amount), 'spent': float(total), 'percentage': percentage}
+
+        if percentage < 50:
+            message = f"Bien joué, tu es à {percentage}% de ton budget {obj.category.name}."
+        elif percentage < 80:
+            message = f"Attention, tu as déjà utilisé {percentage}% de ton budget {obj.category.name}."
+        elif percentage < 100:
+            message = f"Prudence : {percentage}% du budget {obj.category.name} est atteint."
+        else:
+            message = f"Budget {obj.category.name} dépassé de {round(percentage-100,1)}% !"
+
+        return {
+            'limit': float(budget.limit_amount),
+            'spent': float(total),
+            'percentage': percentage,
+            'message': message
+        }
 
 class BudgetSerializer(serializers.ModelSerializer):
     class Meta:
@@ -50,3 +65,4 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['monthly_income', 'currency']
+
