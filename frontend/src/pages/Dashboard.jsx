@@ -4,6 +4,7 @@ import { logout } from "../services/auth";
 import { useNavigate } from "react-router-dom";
 import TransactionForm from "../components/TransactionForm";
 import BudgetProgress from "../components/BudgetProgress";
+import ExpenseChart from "../components/ExpenseChart";
 
 export default function Dashboard() {
   const [transactions, setTransactions] = useState([]);
@@ -46,7 +47,10 @@ export default function Dashboard() {
         categories={categories}
         onTransactionAdded={(newT) => setTransactions([newT, ...transactions])}
       />
+      
       <BudgetProgress budgets={budgets} categories={categories} transactions={transactions} />
+
+      <ExpenseChart transactions={transactions} categories={categories} />
 
       <h2>Transactions récentes</h2>
       <ul>
