@@ -13,3 +13,8 @@ export const logout = () => {
 };
 
 export const isAuthenticated = () => !!localStorage.getItem("access");
+
+export const register = async (username, email, password) => {
+  const { data } = await api.post("register/", { username, email, password });
+  return data;
+};

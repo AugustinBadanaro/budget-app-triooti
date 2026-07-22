@@ -3,6 +3,7 @@ import { getTransactions, getBudgets, getCategories } from "../services/transact
 import { logout } from "../services/auth";
 import { useNavigate } from "react-router-dom";
 import TransactionForm from "../components/TransactionForm";
+import BudgetProgress from "../components/BudgetProgress";
 
 export default function Dashboard() {
   const [transactions, setTransactions] = useState([]);
@@ -45,14 +46,7 @@ export default function Dashboard() {
         categories={categories}
         onTransactionAdded={(newT) => setTransactions([newT, ...transactions])}
       />
-      <h2>Budgets</h2>
-      <ul>
-        {budgets.map((b) => (
-          <li key={b.id}>
-            {b.category_name || b.category} — {b.amount} FCFA
-          </li>
-        ))}
-      </ul>
+      <BudgetProgress budgets={budgets} categories={categories} transactions={transactions} />
 
       <h2>Transactions récentes</h2>
       <ul>
