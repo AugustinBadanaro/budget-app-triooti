@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import TransactionForm from "../components/TransactionForm";
 import BudgetProgress from "../components/BudgetProgress";
 import ExpenseChart from "../components/ExpenseChart";
+import TransactionList from "../components/TransactionList";
 
 export default function Dashboard() {
   const [transactions, setTransactions] = useState([]);
@@ -53,13 +54,11 @@ export default function Dashboard() {
       <ExpenseChart transactions={transactions} categories={categories} />
 
       <h2>Transactions récentes</h2>
-      <ul>
-        {transactions.map((t) => (
-          <li key={t.id}>
-            {t.date} — {t.category_name || t.category} — {t.amount} FCFA
-          </li>
-        ))}
-      </ul>
+      <TransactionList
+        transactions={transactions}
+        categories={categories}
+        onDelete={(id) => setTransactions(transactions.filter((t) => t.id !== id))}
+      />
     </div>
   );
 }
