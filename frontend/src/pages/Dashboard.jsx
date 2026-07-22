@@ -13,6 +13,7 @@ export default function Dashboard() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
 
   useEffect(() => {
     const load = async () => {
@@ -39,23 +40,33 @@ export default function Dashboard() {
     navigate("/login");
   };
 
+  const filteredTransactions = transactions.filter((t) => t.date?.startsWith(selectedMonth));
   if (loading) return <p>Chargement...</p>;
 
   return (
     <div>
       <button onClick={handleLogout}>Déconnexion</button>
+
+      <div>
+        <label>Mois : </label>
+        <input
+          type="month"
+          value={selectedMonth}
+          onChange={(e) => setSelectedMonth(e.target.value)}
+          />
+      </div>
       <TransactionForm
         categories={categories}
         onTransactionAdded={(newT) => setTransactions([newT, ...transactions])}
       />
       
-      <BudgetProgress budgets={budgets} categories={categories} transactions={transactions} />
+      <BudgetProgress budgets={budgets} categories={categories} transactions={filteredTransactions} />
 
-      <ExpenseChart transactions={transactions} categories={categories} />
+      <ExpenseChart transactions={filteredTransactions} categories={categories} />
 
       <h2>Transactions récentes</h2>
       <TransactionList
-        transactions={transactions}
+        transactions={filteredTransactions}
         categories={categories}
         onDelete={(id) => setTransactions(transactions.filter((t) => t.id !== id))}
       />
