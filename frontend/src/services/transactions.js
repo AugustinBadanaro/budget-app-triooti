@@ -11,3 +11,6 @@ export const getAutoBudgetSuggestions = (monthly_income) =>
   api.post("budgets/auto/", { monthly_income }).then((r) => r.data);
 
 export const createBudget = (data) => api.post("budgets/", data).then((r) => r.data);
+
+export const updateTransaction = (id, data) =>
+  api.patch(`transactions/${id}/`, data).then((r) => r.data);

@@ -1,9 +1,16 @@
 export default function BudgetProgress({ budgets, categories, transactions }) {
-  const getCategoryName = (id) => categories.find((c) => c.id === id)?.name || "Inconnue";
+  const getCategoryName = (id) => categories.find((c) => Number(c.id) === Number(id))?.name || "Inconnue";
 
   const getSpent = (categoryId, month) => {
+    const monthPrefix = month.slice(0, 7); // "2026-07"
     return transactions
-      .filter((t) => t.category === categoryId && t.type === "expense" && t.date?.startsWith(month.slice(0, 7)))
+      .filter(
+        (t) =>
+          Number(t.category) === Number(categoryId) &&
+          t.type === "expense" &&
+          t.date &&
+          t.date.startsWith(monthPrefix)
+      )
       .reduce((sum, t) => sum + parseFloat(t.amount), 0);
   };
 

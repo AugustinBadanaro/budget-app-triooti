@@ -75,6 +75,9 @@ export default function Dashboard() {
         transactions={filteredTransactions}
         categories={categories}
         onDelete={(id) => setTransactions(transactions.filter((t) => t.id !== id))}
+        onUpdate={(updated) =>
+          setTransactions(transactions.map((t) => (t.id === updated.id ? updated : t)))
+        }
       />
     </div>
   );
