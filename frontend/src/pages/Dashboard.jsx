@@ -6,6 +6,7 @@ import TransactionForm from "../components/TransactionForm";
 import BudgetProgress from "../components/BudgetProgress";
 import ExpenseChart from "../components/ExpenseChart";
 import TransactionList from "../components/TransactionList";
+import AutoBudget from "../components/AutoBudget";
 
 export default function Dashboard() {
   const [transactions, setTransactions] = useState([]);
@@ -58,6 +59,11 @@ export default function Dashboard() {
       <TransactionForm
         categories={categories}
         onTransactionAdded={(newT) => setTransactions([newT, ...transactions])}
+      />
+
+      <AutoBudget
+        month={selectedMonth}
+        onBudgetsCreated={(newBudgets) => setBudgets([...budgets, ...newBudgets])}
       />
       
       <BudgetProgress budgets={budgets} categories={categories} transactions={filteredTransactions} />
