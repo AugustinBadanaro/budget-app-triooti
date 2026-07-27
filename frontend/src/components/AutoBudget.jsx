@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { getAutoBudgetSuggestions, createBudget } from "../services/transactions";
 
-export default function AutoBudget({ month, onBudgetsCreated }) {
+export default function AutoBudget({ month, budgets, onBudgetsCreated }) {
 const [income, setIncome] = useState("");
 const [suggestions, setSuggestions] = useState([]);
 const [error, setError] = useState("");
@@ -29,6 +29,18 @@ const [validated, setValidated] = useState(false);
   };
 
   const handleValidate = async () => {
+    const existingCategoryIds = budgets
+     .filter((b) => b.month === `${month}-01`)
+      .map((b) => Number(b.category));
+
+  const duplicates = suggestions.filter((s) => existingCategoryIds.includes(Number(s.category_id)));
+
+  if (duplicates.length > 0) {
+    setError(
+      `Budget déjà existant pour : ${duplicates.map((d) => d.category_name).join(", ")}. Supprime-le d'abord ou change de mois.`
+    );
+    return;
+  }
     setSaving(true);
     if (validated) return;
     setValidated(true);

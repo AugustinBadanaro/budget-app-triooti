@@ -66,6 +66,7 @@ export default function Dashboard() {
 
       <AutoBudget
         month={selectedMonth}
+        budgets={budgets}
         onBudgetsCreated={(newBudgets) => setBudgets([...budgets, ...newBudgets])}
       />
       
