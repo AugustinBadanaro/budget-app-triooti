@@ -2,14 +2,16 @@ import { useState } from "react";
 import { getAutoBudgetSuggestions, createBudget } from "../services/transactions";
 
 export default function AutoBudget({ month, onBudgetsCreated }) {
-  const [income, setIncome] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-  const [error, setError] = useState("");
-  const [saving, setSaving] = useState(false);
+const [income, setIncome] = useState("");
+const [suggestions, setSuggestions] = useState([]);
+const [error, setError] = useState("");
+const [saving, setSaving] = useState(false);
+const [validated, setValidated] = useState(false);
 
   const handleCalculate = async (e) => {
     e.preventDefault();
     setError("");
+    setValidated(false);
     try {
       const data = await getAutoBudgetSuggestions(parseFloat(income));
       setSuggestions(data);
@@ -28,6 +30,8 @@ export default function AutoBudget({ month, onBudgetsCreated }) {
 
   const handleValidate = async () => {
     setSaving(true);
+    if (validated) return;
+    setValidated(true);
     setError("");
     try {
       const created = await Promise.all(
@@ -93,7 +97,7 @@ export default function AutoBudget({ month, onBudgetsCreated }) {
               ))}
             </tbody>
           </table>
-          <button onClick={handleValidate} disabled={saving}>
+          <button onClick={handleValidate} disabled={saving || validated}>
             {saving ? "Enregistrement..." : "Valider et créer les budgets"}
           </button>
         </div>
