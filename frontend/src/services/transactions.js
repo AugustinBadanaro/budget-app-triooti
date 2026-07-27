@@ -15,3 +15,5 @@ export const updateTransaction = (id, data) =>api.patch(`transactions/${id}/`, d
 
 export const createCategory = (data) => api.post("categories/", data).then((r) => r.data);
 export const deleteCategory = (id) => api.delete(`categories/${id}/`);
+
+export const deleteBudget = (id) => api.delete(`budgets/${id}/`);

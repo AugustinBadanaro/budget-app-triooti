@@ -70,7 +70,12 @@ export default function Dashboard() {
         onBudgetsCreated={(newBudgets) => setBudgets([...budgets, ...newBudgets])}
       />
       
-      <BudgetProgress budgets={budgets} categories={categories} transactions={filteredTransactions} />
+      <BudgetProgress
+        budgets={budgets}
+        categories={categories}
+        transactions={filteredTransactions}
+        onDelete={(id) => setBudgets(budgets.filter((b) => b.id !== id))}
+      />
 
       <ExpenseChart transactions={filteredTransactions} categories={categories} />
 
