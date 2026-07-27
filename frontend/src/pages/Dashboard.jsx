@@ -7,6 +7,7 @@ import BudgetProgress from "../components/BudgetProgress";
 import ExpenseChart from "../components/ExpenseChart";
 import TransactionList from "../components/TransactionList";
 import AutoBudget from "../components/AutoBudget";
+import CategoryManager from "../components/CategoryManager";
 
 export default function Dashboard() {
   const [transactions, setTransactions] = useState([]);
@@ -60,6 +61,8 @@ export default function Dashboard() {
         categories={categories}
         onTransactionAdded={(newT) => setTransactions([newT, ...transactions])}
       />
+
+      <CategoryManager categories={categories} onCategoriesChange={setCategories} />
 
       <AutoBudget
         month={selectedMonth}
