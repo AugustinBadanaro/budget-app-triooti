@@ -1,4 +1,5 @@
 import { deleteBudget } from "../services/transactions";
+import BudgetRing from "./BudgetRing";
 
 export default function BudgetProgress({ budgets, categories, transactions, onDelete }) {
   const getCategoryName = (id) => categories.find((c) => Number(c.id) === Number(id))?.name || "Inconnue";
@@ -26,33 +27,37 @@ export default function BudgetProgress({ budgets, categories, transactions, onDe
     }
   };
 
+  if (budgets.length === 0) {
+    return <p style={{ color: "var(--slate)" }}>Aucun budget défini pour ce mois.</p>;
+  }
+
   return (
-    <div>
-      <h3>Budgets du mois</h3>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18 }}>
       {budgets.map((b) => {
         const limit = parseFloat(b.limit_amount);
         const spent = getSpent(b.category, b.month);
-        const percentage = limit > 0 ? Math.min((spent / limit) * 100, 100) : 0;
+        const percentage = limit > 0 ? (spent / limit) * 100 : 0;
         const over = spent > limit;
 
         return (
-          <div key={b.id} style={{ marginBottom: "10px" }}>
-            <p>
-              {getCategoryName(b.category)} — {spent.toFixed(0)} / {limit.toFixed(0)} FCFA
-              {over && <span style={{ color: "red" }}> (dépassé)</span>}
-              <button onClick={() => handleDelete(b.id)} style={{ marginLeft: "10px" }}>
-                Supprimer
-              </button>
-            </p>
-            <div style={{ background: "#eee", height: "10px", width: "100%" }}>
-              <div
-                style={{
-                  background: over ? "red" : "green",
-                  height: "10px",
-                  width: `${percentage}%`,
-                }}
-              />
+          <div key={b.id} className="card" style={{ textAlign: "center" }}>
+            <BudgetRing percentage={percentage} over={over} />
+            <div style={{ fontSize: 13.8, fontWeight: 600, marginBottom: 2 }}>
+              {getCategoryName(b.category)}
             </div>
+            <div
+              style={{
+                fontSize: 11.8,
+                color: "var(--slate)",
+                fontFamily: "IBM Plex Mono, monospace",
+                marginBottom: 10,
+              }}
+            >
+              {spent.toFixed(0)} / {limit.toFixed(0)} F
+            </div>
+            <button className="btn-ghost" onClick={() => handleDelete(b.id)}>
+              Supprimer
+            </button>
           </div>
         );
       })}
