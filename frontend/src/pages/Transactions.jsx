@@ -1,11 +1,22 @@
+import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import TransactionForm from "../components/TransactionForm";
 import TransactionList from "../components/TransactionList";
+import TransactionFilters from "../components/TransactionFilters";
 
 export default function Transactions() {
   const { transactions, setTransactions, categories, selectedMonth, setSelectedMonth } = useOutletContext();
 
-  const filtered = transactions.filter((t) => t.date?.startsWith(selectedMonth));
+  const [filters, setFilters] = useState({ category: "", minAmount: "", maxAmount: "", search: "" });
+
+  const filtered = transactions.filter((t) => {
+    if (!t.date?.startsWith(selectedMonth)) return false;
+    if (filters.category && Number(t.category) !== Number(filters.category)) return false;
+    if (filters.minAmount && parseFloat(t.amount) < parseFloat(filters.minAmount)) return false;
+    if (filters.maxAmount && parseFloat(t.amount) > parseFloat(filters.maxAmount)) return false;
+    if (filters.search && !t.description?.toLowerCase().includes(filters.search.toLowerCase())) return false;
+    return true;
+  });
 
   return (
     <div>
@@ -24,6 +35,8 @@ export default function Transactions() {
         categories={categories}
         onTransactionAdded={(newT) => setTransactions([newT, ...transactions])}
       />
+
+      <TransactionFilters categories={categories} onFilterChange={setFilters} />
 
       <TransactionList
         transactions={filtered}
