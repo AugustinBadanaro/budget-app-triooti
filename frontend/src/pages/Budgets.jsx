@@ -1,6 +1,7 @@
 import { useOutletContext } from "react-router-dom";
 import BudgetProgress from "../components/BudgetProgress";
 import AutoBudget from "../components/AutoBudget";
+import BudgetAlertBanner from "../components/BudgetAlertBanner";
 
 export default function Budgets() {
   const { transactions, budgets, setBudgets, categories, selectedMonth } = useOutletContext();
@@ -10,6 +11,13 @@ export default function Budgets() {
   return (
     <div>
       <h2>Budgets</h2>
+
+      <BudgetAlertBanner
+        budgets={budgets}
+        categories={categories}
+        transactions={filtered}
+        selectedMonth={selectedMonth}
+      />
 
       <AutoBudget
         month={selectedMonth}
