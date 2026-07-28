@@ -1,21 +1,22 @@
 import { useState } from "react";
 import { deleteTransaction, updateTransaction } from "../services/transactions";
 
-export default function TransactionList({
-  transactions,
-  categories,
-  onDelete,
-  onUpdate,
-}) {
+const rowStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  padding: "13px 22px",
+  borderBottom: "1px dashed var(--line)",
+};
+
+export default function TransactionList({ transactions, categories, onDelete, onUpdate }) {
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({});
 
-  const getCategoryName = (id) =>
-    categories.find((c) => c.id === id)?.name || "Inconnue";
+  const getCategoryName = (id) => categories.find((c) => Number(c.id) === Number(id))?.name || "Inconnue";
 
   const handleDelete = async (id) => {
     if (!window.confirm("Supprimer cette transaction ?")) return;
-
     try {
       await deleteTransaction(id);
       onDelete(id);
@@ -24,14 +25,9 @@ export default function TransactionList({
     }
   };
 
-  const startEdit = (transaction) => {
-    setEditingId(transaction.id);
-    setEditData({
-      amount: transaction.amount,
-      category: transaction.category,
-      type: transaction.type,
-      description: transaction.description,
-    });
+  const startEdit = (t) => {
+    setEditingId(t.id);
+    setEditData({ amount: t.amount, category: t.category, type: t.type, description: t.description });
   };
 
   const cancelEdit = () => {
@@ -47,7 +43,6 @@ export default function TransactionList({
         type: editData.type,
         description: editData.description,
       });
-
       onUpdate(updated);
       cancelEdit();
     } catch (err) {
@@ -56,123 +51,143 @@ export default function TransactionList({
   };
 
   if (transactions.length === 0) {
-    return <p>Aucune transaction.</p>;
+    return (
+      <div className="card" style={{ textAlign: "center", padding: "60px 24px" }}>
+        <div
+          style={{
+            width: 60,
+            height: 60,
+            borderRadius: "50%",
+            background: "var(--rose-soft)",
+            color: "var(--rose)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: "0 auto 18px",
+            fontSize: 24,
+          }}
+        >
+          !
+        </div>
+        <h3 style={{ marginBottom: 6, fontFamily: "Inter, sans-serif" }}>Aucune transaction</h3>
+        <p style={{ color: "var(--slate)", fontSize: 13.3 }}>
+          Ajoutez votre première dépense ou revenu pour commencer.
+        </p>
+      </div>
+    );
   }
 
   return (
-    <table
-      border="1"
-      cellPadding="6"
-      style={{ borderCollapse: "collapse", width: "100%" }}
+    <div
+      className="card"
+      style={{ padding: 0, position: "relative", overflow: "hidden" }}
     >
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Catégorie</th>
-          <th>Type</th>
-          <th>Montant</th>
-          <th>Description</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 8,
+          backgroundImage:
+            "radial-gradient(circle at 10px 4px, var(--rose-pale) 4px, transparent 4.5px)",
+          backgroundSize: "20px 8px",
+          backgroundRepeat: "repeat-x",
+        }}
+      />
+      <div
+        style={{
+          padding: "18px 22px 6px",
+          fontSize: 12,
+          fontWeight: 700,
+          letterSpacing: ".04em",
+          textTransform: "uppercase",
+          color: "var(--slate-light)",
+        }}
+      >
+        Transactions
+      </div>
 
-      <tbody>
-        {transactions.map((t) =>
-          editingId === t.id ? (
-            <tr key={t.id}>
-              <td>{t.date}</td>
+      {transactions.map((t) =>
+        editingId === t.id ? (
+          <div key={t.id} style={{ ...rowStyle, gap: 10, flexWrap: "wrap" }}>
+            <select
+              value={editData.category}
+              onChange={(e) => setEditData({ ...editData, category: e.target.value })}
+              style={{ width: "auto" }}
+            >
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
+            <select
+              value={editData.type}
+              onChange={(e) => setEditData({ ...editData, type: e.target.value })}
+              style={{ width: "auto" }}
+            >
+              <option value="expense">Dépense</option>
+              <option value="income">Revenu</option>
+            </select>
+            <input
+              type="number"
+              step="0.01"
+              value={editData.amount}
+              onChange={(e) => setEditData({ ...editData, amount: e.target.value })}
+              style={{ width: 110 }}
+            />
+            <input
+              type="text"
+              value={editData.description}
+              onChange={(e) => setEditData({ ...editData, description: e.target.value })}
+              style={{ width: 160 }}
+            />
+            <button className="btn-primary" onClick={() => saveEdit(t.id)}>Enregistrer</button>
+            <button className="btn-ghost" onClick={cancelEdit}>Annuler</button>
+          </div>
+        ) : (
+          <div key={t.id} style={rowStyle}>
+            <div style={{ display: "flex", alignItems: "center", gap: 13 }}>
+              <div
+                style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: 11,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                  background: t.type === "income" ? "var(--success-soft)" : "var(--rose-soft)",
+                  color: t.type === "income" ? "var(--success)" : "var(--rose)",
+                  fontWeight: 700,
+                }}
+              >
+                {getCategoryName(t.category).charAt(0)}
+              </div>
+              <div>
+                <div style={{ fontSize: 13.8, fontWeight: 600 }}>{t.description || "—"}</div>
+                <div style={{ fontSize: 12, color: "var(--slate)", marginTop: 1 }}>
+                  {getCategoryName(t.category)} · {t.date}
+                </div>
+              </div>
+            </div>
 
-              <td>
-                <select
-                  value={editData.category}
-                  onChange={(e) =>
-                    setEditData({
-                      ...editData,
-                      category: e.target.value,
-                    })
-                  }
-                >
-                  {categories.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-              </td>
-
-              <td>
-                <select
-                  value={editData.type}
-                  onChange={(e) =>
-                    setEditData({
-                      ...editData,
-                      type: e.target.value,
-                    })
-                  }
-                >
-                  <option value="income">Revenu</option>
-                  <option value="expense">Dépense</option>
-                </select>
-              </td>
-
-              <td>
-                <input
-                  type="number"
-                  step="0.01"
-                  value={editData.amount}
-                  onChange={(e) =>
-                    setEditData({
-                      ...editData,
-                      amount: e.target.value,
-                    })
-                  }
-                />
-              </td>
-
-              <td>
-                <input
-                  type="text"
-                  value={editData.description}
-                  onChange={(e) =>
-                    setEditData({
-                      ...editData,
-                      description: e.target.value,
-                    })
-                  }
-                />
-              </td>
-
-              <td>
-                <button onClick={() => saveEdit(t.id)}>
-                  Enregistrer
-                </button>
-
-                <button onClick={cancelEdit}>
-                  Annuler
-                </button>
-              </td>
-            </tr>
-          ) : (
-            <tr key={t.id}>
-              <td>{t.date}</td>
-              <td>{getCategoryName(t.category)}</td>
-              <td>{t.type === "income" ? "Revenu" : "Dépense"}</td>
-              <td>{t.amount} FCFA</td>
-              <td>{t.description}</td>
-
-              <td>
-                <button onClick={() => startEdit(t)}>
-                  Modifier
-                </button>
-
-                <button onClick={() => handleDelete(t.id)}>
-                  Supprimer
-                </button>
-              </td>
-            </tr>
-          )
-        )}
-      </tbody>
-    </table>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div
+                style={{
+                  fontFamily: "IBM Plex Mono, monospace",
+                  fontSize: 13.8,
+                  fontWeight: 500,
+                  color: t.type === "income" ? "var(--success)" : "var(--alert)",
+                }}
+              >
+                {t.type === "income" ? "+" : "-"} {t.amount} F
+              </div>
+              <button className="btn-ghost" onClick={() => startEdit(t)}>Modifier</button>
+              <button className="btn-ghost" onClick={() => handleDelete(t.id)}>Supprimer</button>
+            </div>
+          </div>
+        )
+      )}
+    </div>
   );
 }
