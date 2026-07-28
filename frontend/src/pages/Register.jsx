@@ -21,33 +21,81 @@ export default function Register() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Inscription</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <input
-        type="text"
-        placeholder="Nom d'utilisateur"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        required
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Mot de passe"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      <button type="submit">S'inscrire</button>
-      <p>
-        Déjà un compte ? <Link to="/login">Se connecter</Link>
-      </p>
-    </form>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "var(--rose-pale)",
+      }}
+    >
+      <form onSubmit={handleSubmit} className="card" style={{ width: 390, padding: "42px 38px" }}>
+        <div
+          style={{
+            width: 34,
+            height: 34,
+            borderRadius: 10,
+            background: "linear-gradient(135deg, var(--rose), #A8195A)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#fff",
+            fontFamily: "Fraunces, serif",
+            fontWeight: 700,
+            fontSize: 16,
+            marginBottom: 18,
+          }}
+        >
+          B
+        </div>
+        <h1 style={{ fontSize: 25, marginBottom: 6 }}>Créer un compte</h1>
+        <p style={{ color: "var(--slate)", fontSize: 13.5, marginBottom: 26 }}>
+          Commencez à suivre votre budget
+        </p>
+
+        {error && <p style={{ color: "var(--alert)", marginBottom: 12 }}>{error}</p>}
+
+        <div className="field">
+          <label>Nom d'utilisateur</label>
+          <input
+            type="text"
+            placeholder="votre_nom"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="field">
+          <label>Adresse e-mail</label>
+          <input
+            type="email"
+            placeholder="vous@exemple.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
+        <div className="field">
+          <label>Mot de passe</label>
+          <input
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+
+        <button className="btn-primary" style={{ width: "100%", justifyContent: "center" }} type="submit">
+          S'inscrire
+        </button>
+
+        <div style={{ marginTop: 20, textAlign: "center", fontSize: 13, color: "var(--slate)" }}>
+          Déjà un compte ? <Link to="/login" style={{ color: "var(--rose)", fontWeight: 600 }}>Se connecter</Link>
+        </div>
+      </form>
+    </div>
   );
 }
