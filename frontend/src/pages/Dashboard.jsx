@@ -1,93 +1,27 @@
-import { useEffect, useState } from "react";
-import { getTransactions, getBudgets, getCategories } from "../services/transactions";
-import { logout } from "../services/auth";
-import { useNavigate } from "react-router-dom";
-import TransactionForm from "../components/TransactionForm";
-import BudgetProgress from "../components/BudgetProgress";
+import { useOutletContext } from "react-router-dom";
 import ExpenseChart from "../components/ExpenseChart";
-import TransactionList from "../components/TransactionList";
-import AutoBudget from "../components/AutoBudget";
-import CategoryManager from "../components/CategoryManager";
 
 export default function Dashboard() {
-  const [transactions, setTransactions] = useState([]);
-  const [budgets, setBudgets] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-  const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
+  const { transactions, categories, selectedMonth } = useOutletContext();
 
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const [t, b, c] = await Promise.all([
-          getTransactions(),
-          getBudgets(),
-          getCategories(),
-        ]);
-        setTransactions(t);
-        setBudgets(b);
-        setCategories(c);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
-  }, []);
+  const filtered = transactions.filter((t) => t.date?.startsWith(selectedMonth));
+  const recent = [...filtered].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
-
-  const filteredTransactions = transactions.filter((t) => t.date?.startsWith(selectedMonth));
-  if (loading) return <p>Chargement...</p>;
+  const getCategoryName = (id) => categories.find((c) => Number(c.id) === Number(id))?.name || "Inconnue";
 
   return (
     <div>
-      <button onClick={handleLogout}>Déconnexion</button>
+      <h2>Tableau de bord</h2>
+      <ExpenseChart transactions={filtered} categories={categories} />
 
-      <div>
-        <label>Mois : </label>
-        <input
-          type="month"
-          value={selectedMonth}
-          onChange={(e) => setSelectedMonth(e.target.value)}
-          />
-      </div>
-      <TransactionForm
-        categories={categories}
-        onTransactionAdded={(newT) => setTransactions([newT, ...transactions])}
-      />
-
-      <CategoryManager categories={categories} onCategoriesChange={setCategories} />
-
-      <AutoBudget
-        month={selectedMonth}
-        budgets={budgets}
-        onBudgetsCreated={(newBudgets) => setBudgets([...budgets, ...newBudgets])}
-      />
-      
-      <BudgetProgress
-        budgets={budgets}
-        categories={categories}
-        transactions={filteredTransactions}
-        onDelete={(id) => setBudgets(budgets.filter((b) => b.id !== id))}
-      />
-
-      <ExpenseChart transactions={filteredTransactions} categories={categories} />
-
-      <h2>Transactions récentes</h2>
-      <TransactionList
-        transactions={filteredTransactions}
-        categories={categories}
-        onDelete={(id) => setTransactions(transactions.filter((t) => t.id !== id))}
-        onUpdate={(updated) =>
-          setTransactions(transactions.map((t) => (t.id === updated.id ? updated : t)))
-        }
-      />
+      <h3 style={{ marginTop: 24 }}>Dernières transactions</h3>
+      <ul>
+        {recent.map((t) => (
+          <li key={t.id}>
+            {t.date} — {getCategoryName(t.category)} — {t.type === "income" ? "+" : "-"}{t.amount} FCFA
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
