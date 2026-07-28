@@ -1,5 +1,6 @@
 import { useOutletContext } from "react-router-dom";
 import ExpenseChart from "../components/ExpenseChart";
+import StatCards from "../components/StatCards";
 
 export default function Dashboard() {
   const { transactions, categories, selectedMonth } = useOutletContext();
@@ -12,6 +13,9 @@ export default function Dashboard() {
   return (
     <div>
       <h2>Tableau de bord</h2>
+
+      <StatCards transactions={filtered} />
+
       <ExpenseChart transactions={filtered} categories={categories} />
 
       <h3 style={{ marginTop: 24 }}>Dernières transactions</h3>
