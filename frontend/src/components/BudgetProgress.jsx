@@ -1,5 +1,6 @@
 import { deleteBudget } from "../services/transactions";
 import BudgetRing from "./BudgetRing";
+import { formatAmount } from "../services/currency";
 
 export default function BudgetProgress({ budgets, categories, transactions, onDelete }) {
   const getCategoryName = (id) => categories.find((c) => Number(c.id) === Number(id))?.name || "Inconnue";
@@ -53,7 +54,7 @@ export default function BudgetProgress({ budgets, categories, transactions, onDe
                 marginBottom: 10,
               }}
             >
-              {spent.toFixed(0)} / {limit.toFixed(0)} F
+              {formatAmount(spent)} / {formatAmount(limit)}
             </div>
             <button className="btn-ghost" onClick={() => handleDelete(b.id)}>
               Supprimer

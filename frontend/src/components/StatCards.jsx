@@ -1,3 +1,5 @@
+import { formatAmount } from "../services/currency";
+
 export default function StatCards({ transactions }) {
   const income = transactions
     .filter((t) => t.type === "income")
@@ -29,7 +31,7 @@ export default function StatCards({ transactions }) {
         <div style={iconStyle("var(--rose-soft)", "var(--rose)")}>S</div>
         <div style={{ fontSize: 12, color: "var(--slate)", fontWeight: 600 }}>Solde disponible</div>
         <div style={{ fontFamily: "Fraunces, serif", fontSize: 28, marginTop: 6 }}>
-          {balance.toLocaleString("fr-FR")} <span style={{ fontSize: 15, color: "var(--slate)" }}>FCFA</span>
+          {formatAmount(balance)}
         </div>
       </div>
 
@@ -37,7 +39,7 @@ export default function StatCards({ transactions }) {
         <div style={iconStyle("var(--success-soft)", "var(--success)")}>R</div>
         <div style={{ fontSize: 12, color: "var(--slate)", fontWeight: 600 }}>Revenus du mois</div>
         <div style={{ fontFamily: "Fraunces, serif", fontSize: 23, marginTop: 6 }}>
-          {income.toLocaleString("fr-FR")} F
+          {formatAmount(income)}
         </div>
       </div>
 
@@ -45,7 +47,7 @@ export default function StatCards({ transactions }) {
         <div style={iconStyle("var(--alert-soft)", "var(--alert)")}>D</div>
         <div style={{ fontSize: 12, color: "var(--slate)", fontWeight: 600 }}>Dépenses du mois</div>
         <div style={{ fontFamily: "Fraunces, serif", fontSize: 23, marginTop: 6, color: "var(--alert)" }}>
-          {expenses.toLocaleString("fr-FR")} F
+          {formatAmount(expenses)}
         </div>
       </div>
     </div>

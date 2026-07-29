@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { deleteTransaction, updateTransaction } from "../services/transactions";
+import { formatAmount } from "../services/currency";
 
 const rowStyle = {
   display: "flex",
@@ -180,7 +181,7 @@ export default function TransactionList({ transactions, categories, onDelete, on
                   color: t.type === "income" ? "var(--success)" : "var(--alert)",
                 }}
               >
-                {t.type === "income" ? "+" : "-"} {t.amount} F
+                {t.type === "income" ? "+" : "-"} {formatAmount(t.amount)}
               </div>
               <button className="btn-ghost" onClick={() => startEdit(t)}>Modifier</button>
               <button className="btn-ghost" onClick={() => handleDelete(t.id)}>Supprimer</button>

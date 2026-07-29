@@ -2,6 +2,7 @@ import { useOutletContext } from "react-router-dom";
 import ExpenseChart from "../components/ExpenseChart";
 import StatCards from "../components/StatCards";
 import EvolutionChart from "../components/EvolutionChart";
+import { formatAmount } from "../services/currency";
 
 export default function Dashboard() {
   const { transactions, categories, selectedMonth } = useOutletContext();
@@ -25,7 +26,7 @@ export default function Dashboard() {
       <ul>
         {recent.map((t) => (
           <li key={t.id}>
-            {t.date} — {getCategoryName(t.category)} — {t.type === "income" ? "+" : "-"}{t.amount} FCFA
+            {t.date} — {getCategoryName(t.category)} — {t.type === "income" ? "+" : "-"}{formatAmount(t.amount)}
           </li>
         ))}
       </ul>

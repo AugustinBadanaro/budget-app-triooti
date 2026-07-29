@@ -1,7 +1,7 @@
 import { useOutletContext } from "react-router-dom";
 import { useState } from "react";
 import CategoryManager from "../components/CategoryManager";
-import { exportToCSV, exportToPDF } from "../services/export";
+import { exportToExcel, exportToPDF } from "../services/export";
 import { getCurrency, setCurrency as saveCurrency, getNotifications, setNotifications as saveNotifications } from "../services/settings";
 
 export default function Settings() {
@@ -40,7 +40,7 @@ export default function Settings() {
     background: "#fff",
     borderRadius: "50%",
     transition: ".15s",
-  });
+  }); 
 
   const switchRow = { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 0", borderBottom: "1px solid var(--line)" };
 
@@ -116,8 +116,8 @@ export default function Settings() {
             <button className="btn-ghost" onClick={() => exportToPDF(transactions, categories)}>
               Export PDF
             </button>
-            <button className="btn-ghost" onClick={() => exportToCSV(transactions, categories)}>
-              Export Excel (CSV)
+            <button className="btn-ghost" onClick={() => exportToExcel(transactions, categories)}>
+              Export Excel
             </button>
           </div>
         </div>
