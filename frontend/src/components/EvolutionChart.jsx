@@ -25,6 +25,12 @@ export default function EvolutionChart({ transactions }) {
       .reduce((sum, t) => sum + parseFloat(t.amount), 0)
   );
 
+  const movingAvg = totals.map((_, i) => {
+    const start = Math.max(0, i - 2);
+    const slice = totals.slice(start, i + 1);
+    return slice.reduce((s, v) => s + v, 0) / slice.length;
+  });
+
   const labels = months.map((m) => {
     const [year, mon] = m.split("-");
     return new Date(year, mon - 1).toLocaleDateString("fr-FR", { month: "short" });
@@ -43,6 +49,16 @@ export default function EvolutionChart({ transactions }) {
         pointRadius: 3,
         pointBackgroundColor: "#D6336C",
       },
+      {
+        label: "Moyenne mobile (3 mois)",
+        data: movingAvg,
+        borderColor: "#3A6EA5",
+        backgroundColor: "transparent",
+        borderDash: [6, 4],
+        fill: false,
+        tension: 0.35,
+        pointRadius: 0,
+      },
     ],
   };
 
@@ -54,7 +70,7 @@ export default function EvolutionChart({ transactions }) {
       <Line
         data={data}
         options={{
-          plugins: { legend: { display: false } },
+          plugins: { legend: { display: true, position: "bottom", labels: { font: { family: "Inter", size: 11 }, boxWidth: 10 } } },
           scales: {
             y: { ticks: { font: { family: "IBM Plex Mono", size: 10.5 } }, grid: { color: "#F0E3EA" } },
             x: { ticks: { font: { family: "Inter", size: 11 } }, grid: { display: false } },

@@ -3,9 +3,10 @@ import ExpenseChart from "../components/ExpenseChart";
 import StatCards from "../components/StatCards";
 import EvolutionChart from "../components/EvolutionChart";
 import { formatAmount } from "../services/currency";
+import KpiPanel from "../components/KpiPanel";
 
 export default function Dashboard() {
-  const { transactions, categories, selectedMonth } = useOutletContext();
+  const { transactions, categories, budgets, selectedMonth } = useOutletContext();
 
   const filtered = transactions.filter((t) => t.date?.startsWith(selectedMonth));
   const recent = [...filtered].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
@@ -17,6 +18,13 @@ export default function Dashboard() {
       <h2>Tableau de bord</h2>
 
       <StatCards transactions={filtered} />
+
+      <KpiPanel
+        transactions={transactions}
+        budgets={budgets}
+        selectedMonth={selectedMonth}
+        categories={categories}
+      />
 
       <ExpenseChart transactions={filtered} categories={categories} />
 
