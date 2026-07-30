@@ -1,5 +1,5 @@
+import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useOutletContext } from "react-router-dom";
 import { logout } from "../services/auth";
 
 const navStyle = {
@@ -8,7 +8,9 @@ const navStyle = {
   justifyContent: "space-between",
   background: "var(--white)",
   borderBottom: "1px solid var(--line)",
-  padding: "14px 32px",
+  padding: "14px 20px",
+  flexWrap: "wrap",
+  gap: 12,
 };
 
 const linkStyle = ({ isActive }) => ({
@@ -23,6 +25,7 @@ const linkStyle = ({ isActive }) => ({
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -31,7 +34,7 @@ export default function Navbar() {
 
   return (
     <nav style={navStyle}>
-      <div style={{ display: "flex", alignItems: "center", gap: "28px" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <div
             style={{
@@ -55,12 +58,24 @@ export default function Navbar() {
           </span>
         </div>
 
-        <div style={{ display: "flex", gap: "6px" }}>
-          <NavLink to="/dashboard" style={linkStyle}>Tableau de bord</NavLink>
-          <NavLink to="/transactions" style={linkStyle}>Transactions</NavLink>
-          <NavLink to="/budgets" style={linkStyle}>Budgets</NavLink>
-          <NavLink to="/settings" style={linkStyle}>Paramètres</NavLink>
-        </div>
+        <button
+          className="btn-ghost"
+          style={{ display: "none" }}
+          id="navbar-toggle"
+          onClick={() => setOpen(!open)}
+        >
+          Menu
+        </button>
+      </div>
+
+      <div
+        className="navbar-links"
+        style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}
+      >
+        <NavLink to="/dashboard" style={linkStyle}>Tableau de bord</NavLink>
+        <NavLink to="/transactions" style={linkStyle}>Transactions</NavLink>
+        <NavLink to="/budgets" style={linkStyle}>Budgets</NavLink>
+        <NavLink to="/settings" style={linkStyle}>Paramètres</NavLink>
       </div>
 
       <button className="btn-ghost" onClick={handleLogout}>
