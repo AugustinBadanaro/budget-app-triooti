@@ -11,10 +11,6 @@ variations mois par mois. Concrètement : une moyenne mobile sur 3 mois glissant
 des dépenses totales, affichée en superposition sur ton graphique d'évolution existant. 
 Utile pour dire "en moyenne, tu dépenses X par mois" plutôt que des chiffres qui sautent.
 
-
-
-
-
 */
 
 export default function KpiPanel({ transactions, budgets, selectedMonth, categories }) {
