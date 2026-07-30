@@ -43,10 +43,62 @@ export default function TransactionForm({ categories, onTransactionAdded }) {
         ))}
       </select>
 
-      <select value={type} onChange={(e) => setType(e.target.value)} required>
-        <option value="expense">Dépense</option>
-        <option value="income">Revenu</option>
-      </select>
+      <div
+        style={{
+          display: "flex",
+            background: "var(--rose-soft)",
+            borderRadius: 11,
+            padding: 4,
+            marginBottom: 18,
+        }}
+      >
+        <button
+          type="button"
+          onClick={() => setType("expense")}
+          style={{
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 7,
+            border: "none",
+            padding: 10,
+            borderRadius: 9,
+            fontSize: 13.3,
+            fontWeight: 600,
+            cursor: "pointer",
+            color: "var(--rose)",
+            background: type === "expense" ? "var(--white)" : "transparent",
+            opacity: type === "expense" ? 1 : 0.55,
+            boxShadow: type === "expense" ? "0 2px 6px rgba(0,0,0,.06)" : "none",
+          }}
+        >
+          ↓ Dépense
+        </button>
+        <button
+          type="button"
+          onClick={() => setType("income")}
+          style={{
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 7,
+            border: "none",
+            padding: 10,
+            borderRadius: 9,
+            fontSize: 13.3,
+            fontWeight: 600,
+            cursor: "pointer",
+            color: "var(--rose)",
+            background: type === "income" ? "var(--white)" : "transparent",
+            opacity: type === "income" ? 1 : 0.55,
+            boxShadow: type === "income" ? "0 2px 6px rgba(0,0,0,.06)" : "none",
+          }}
+        >
+          ↑ Revenu
+        </button>
+      </div>
 
       <input
         type="number"
