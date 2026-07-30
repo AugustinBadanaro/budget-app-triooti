@@ -1,6 +1,6 @@
 import { deleteBudget } from "../services/transactions";
 import BudgetRing from "./BudgetRing";
-import { formatAmount } from "../services/currency";
+import { getCategoryStyle } from "../services/categoryStyle";
 
 export default function BudgetProgress({ budgets, categories, transactions, onDelete }) {
   const getCategoryName = (id) => categories.find((c) => Number(c.id) === Number(id))?.name || "Inconnue";
@@ -42,6 +42,22 @@ export default function BudgetProgress({ budgets, categories, transactions, onDe
 
         return (
           <div key={b.id} className="card" style={{ textAlign: "center" }}>
+            <div
+              style={{
+                width: 38,
+                height: 38,
+                borderRadius: 10,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "0 auto 12px",
+                background: getCategoryStyle(b.category).bg,
+                color: getCategoryStyle(b.category).color,
+                fontWeight: 700,
+              }}
+            >
+              {getCategoryName(b.category).charAt(0)}
+            </div>
             <BudgetRing percentage={percentage} over={over} />
             <div style={{ fontSize: 13.8, fontWeight: 600, marginBottom: 2 }}>
               {getCategoryName(b.category)}
@@ -54,7 +70,7 @@ export default function BudgetProgress({ budgets, categories, transactions, onDe
                 marginBottom: 10,
               }}
             >
-              {formatAmount(spent)} / {formatAmount(limit)}
+              {spent.toFixed(0)} / {limit.toFixed(0)} F
             </div>
             <button className="btn-ghost" onClick={() => handleDelete(b.id)}>
               Supprimer

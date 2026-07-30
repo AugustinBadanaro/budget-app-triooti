@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { deleteTransaction, updateTransaction } from "../services/transactions";
 import { formatAmount } from "../services/currency";
+import { getCategoryStyle } from "../services/categoryStyle";
 
 const rowStyle = {
   display: "flex",
@@ -157,8 +158,8 @@ export default function TransactionList({ transactions, categories, onDelete, on
                   alignItems: "center",
                   justifyContent: "center",
                   flexShrink: 0,
-                  background: t.type === "income" ? "var(--success-soft)" : "var(--rose-soft)",
-                  color: t.type === "income" ? "var(--success)" : "var(--rose)",
+                  background: getCategoryStyle(t.category).bg,
+                  color: getCategoryStyle(t.category).color,
                   fontWeight: 700,
                 }}
               >

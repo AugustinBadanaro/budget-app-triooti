@@ -1,19 +1,21 @@
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { getCategoryStyle } from "../services/categoryStyle";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const COLORS = ["#4e79a7", "#f28e2b", "#e15759", "#76b7b2", "#59a14f", "#edc949", "#af7aa1", "#ff9da7"];
 
 export default function ExpenseChart({ transactions, categories }) {
   const getCategoryName = (id) => categories.find((c) => c.id === id)?.name || "Inconnue";
 
   const totals = {};
+  const colorsByLabel = {};
   transactions
     .filter((t) => t.type === "expense")
     .forEach((t) => {
       const name = getCategoryName(t.category);
       totals[name] = (totals[name] || 0) + parseFloat(t.amount);
+      colorsByLabel[name] = getCategoryStyle(t.category).color;
     });
 
   const labels = Object.keys(totals);
@@ -26,7 +28,7 @@ export default function ExpenseChart({ transactions, categories }) {
     datasets: [
       {
         data: values,
-        backgroundColor: labels.map((_, i) => COLORS[i % COLORS.length]),
+        backgroundColor: labels.map((name) => colorsByLabel[name]),
       },
     ],
   };
