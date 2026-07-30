@@ -33,27 +33,28 @@ export default function CategoryManager({ categories, onCategoriesChange }) {
       <h3>Catégories</h3>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      <form onSubmit={handleCreate}>
+      <form onSubmit={handleCreate} style={{ display: "flex", gap: 10, alignItems: "flex-end", flexWrap: "wrap", marginBottom: 16 }}>
         <input
           type="text"
           placeholder="Nom de la catégorie"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
+          style={{ width: 200 }}
         />
-        <select value={group} onChange={(e) => setGroup(e.target.value)}>
+        <select value={group} onChange={(e) => setGroup(e.target.value)} style={{ width: 140 }}>
           <option value="essential">Essentiel</option>
           <option value="variable">Variable</option>
           <option value="savings">Épargne</option>
         </select>
-        <button type="submit">Ajouter</button>
+        <button className="btn-primary" type="submit">Ajouter</button>
       </form>
 
-      <ul>
+      <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
         {categories.map((c) => (
-          <li key={c.id}>
-            {c.name} ({c.group})
-            <button onClick={() => handleDelete(c.id)} style={{ marginLeft: "10px" }}>
+          <li key={c.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid var(--line)" }}>
+            <span>{c.name} ({c.group})</span>
+            <button className="btn-ghost" onClick={() => handleDelete(c.id)}>
               Supprimer
             </button>
           </li>

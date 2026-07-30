@@ -70,7 +70,7 @@ const [validated, setValidated] = useState(false);
       <h3>Répartition automatique du revenu</h3>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      <form onSubmit={handleCalculate}>
+      <form onSubmit={handleCalculate} style={{ display: "flex", gap: 10, alignItems: "flex-end", marginBottom: 16 }}>
         <input
           type="number"
           step="0.01"
@@ -78,8 +78,9 @@ const [validated, setValidated] = useState(false);
           value={income}
           onChange={(e) => setIncome(e.target.value)}
           required
+          style={{ width: 200 }}
         />
-        <button type="submit">Calculer</button>
+        <button className="btn-primary" type="submit">Calculer</button>
       </form>
 
       {suggestions.length > 0 && (
@@ -109,7 +110,12 @@ const [validated, setValidated] = useState(false);
               ))}
             </tbody>
           </table>
-          <button onClick={handleValidate} disabled={saving || validated}>
+          <button
+            className="btn-primary"
+            onClick={handleValidate}
+            disabled={saving || validated}
+            style={{ marginTop: 14 }}
+          >
             {saving ? "Enregistrement..." : "Valider et créer les budgets"}
           </button>
         </div>

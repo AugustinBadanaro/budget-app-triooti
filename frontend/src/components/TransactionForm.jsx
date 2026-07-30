@@ -116,7 +116,9 @@ export default function TransactionForm({ categories, onTransactionAdded }) {
         onChange={(e) => setDescription(e.target.value)}
       />
 
-      <button type="submit">Ajouter</button>
+      <button className="btn-primary" type="submit" style={{ marginTop: 8, marginBottom: 24 }}>
+        Ajouter
+      </button>
     </form>
   );
 }

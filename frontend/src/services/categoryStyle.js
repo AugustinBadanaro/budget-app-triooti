@@ -11,5 +11,5 @@ const PALETTE = [
 
 export const getCategoryStyle = (categoryId) => {
   const index = Number(categoryId) % PALETTE.length;
-  return PALETTE[index];
+    return PALETTE[index];
 };
