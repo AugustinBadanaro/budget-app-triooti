@@ -1,3 +1,22 @@
+/*
+Taux d'épargne = (revenus − dépenses) / revenus × 100 — indicateur numéro 1 dans toute app de finance perso.
+Taux de respect du budget = % de catégories où les dépenses restent sous la limite ce mois-ci.
+Répartition réelle vs cible 50/30/20 = comparer ce qui est réellement dépensé par groupe (essential/variable/savings) à la répartition théorique — visuellement fort (barres côte à côte).
+Dépense moyenne journalière = dépenses du mois / nombre de jours écoulés — permet de projeter "à ce rythme, tu finiras le mois à X FCFA".
+Catégorie la plus dépensière = mise en avant de la catégorie qui pèse le plus dans le budget.
+
+MBA = Moyennes mobiles / prévisions:
+Lisser les dépenses sur plusieurs mois pour dégager une tendance plutôt que des 
+variations mois par mois. Concrètement : une moyenne mobile sur 3 mois glissants 
+des dépenses totales, affichée en superposition sur ton graphique d'évolution existant. 
+Utile pour dire "en moyenne, tu dépenses X par mois" plutôt que des chiffres qui sautent.
+
+
+
+
+
+*/
+
 export default function KpiPanel({ transactions, budgets, selectedMonth, categories }) {
   const filtered = transactions.filter((t) => t.date?.startsWith(selectedMonth));
 
