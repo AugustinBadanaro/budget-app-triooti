@@ -57,7 +57,6 @@ export default function Navbar() {
             }}
           >
             👤
-          <br />
           </div>
           <button className="btn-ghost" onClick={handleLogout}>
             Déconnexion

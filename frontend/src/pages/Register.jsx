@@ -16,7 +16,7 @@ export default function Register() {
     try {
       await register(username, email, password);
       navigate("/login");
-    } catch (err) {
+    } catch {
       setError("Erreur lors de l'inscription (nom d'utilisateur déjà pris ?)");
     }
   };
