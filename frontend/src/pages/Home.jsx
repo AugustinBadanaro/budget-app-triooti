@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Logo from "../components/Logo";
 
 export default function Home() {
   return (
@@ -17,52 +18,61 @@ export default function Home() {
         padding: 24,
       }}
     >
-      <div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          maxWidth: 450,
+        }}
+      >
+        {/* Logo */}
         <div
           style={{
-            width: 54,
-            height: 54,
-            borderRadius: 14,
-            background: "linear-gradient(135deg, var(--rose), #A8195A)",
             display: "flex",
-            alignItems: "center",
             justifyContent: "center",
-            margin: "0 auto 20px",
-            fontFamily: "Fraunces, serif",
-            fontWeight: 700,
-            fontSize: 24,
+            alignItems: "center",
+            marginBottom: 20,
           }}
         >
-          B
+          <Logo size={54} />
         </div>
 
+        {/* Titre */}
         <h1
           style={{
             fontFamily: "Fraunces, serif",
             fontSize: 36,
-            marginBottom: 12,
+            fontWeight: 700,
+            margin: "0 0 12px 0",
           }}
         >
           Budgetly
         </h1>
 
+        {/* Description */}
         <p
           style={{
             fontSize: 15,
+            lineHeight: 1.7,
             maxWidth: 420,
-            margin: "0 auto 28px",
+            margin: "0 0 28px 0",
             opacity: 0.9,
           }}
         >
-          Prenez le contrôle de vos finances. Suivez vos revenus, gérez vos
-          dépenses et atteignez vos objectifs grâce à une gestion de budget
-          simple, intelligente et efficace.
+          Prenez le contrôle de vos finances. Suivez vos revenus,
+          gérez vos dépenses et atteignez vos objectifs grâce à une
+          gestion de budget simple, intelligente et efficace.
         </p>
 
+        {/* Bouton */}
         <Link
           to="/login"
           className="btn-primary"
-          style={{ textDecoration: "none", display: "inline-flex" }}
+          style={{
+            textDecoration: "none",
+            display: "inline-flex",
+          }}
         >
           Commencer
         </Link>

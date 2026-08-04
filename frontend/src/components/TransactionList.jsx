@@ -149,26 +149,14 @@ export default function TransactionList({ transactions, categories, onDelete, on
         ) : (
           <div key={t.id} style={rowStyle}>
             <div style={{ display: "flex", alignItems: "center", gap: 13 }}>
-              <div
-                style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 11,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                  background: getCategoryStyle(t.category).bg,
-                  color: getCategoryStyle(t.category).color,
-                  fontWeight: 700,
-                }}
-              >
-                {getCategoryName(t.category).charAt(0)}
-              </div>
+              
               <div>
                 <div style={{ fontSize: 13.8, fontWeight: 600 }}>{t.description || "—"}</div>
-                <div style={{ fontSize: 12, color: "var(--slate)", marginTop: 1 }}>
-                  {getCategoryName(t.category)} · {t.date}
+                <div style={{ fontSize: 12, marginTop: 1 }}>
+                  <span style={{ color: getCategoryStyle(t.category).color, fontWeight: 700 }}>
+                    {getCategoryName(t.category)}
+                  </span>
+                  <span style={{ color: "var(--slate)" }}> · {t.date}</span>
                 </div>
               </div>
             </div>

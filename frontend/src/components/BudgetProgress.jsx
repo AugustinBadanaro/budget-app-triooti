@@ -3,7 +3,8 @@ import BudgetRing from "./BudgetRing";
 import { getCategoryStyle } from "../services/categoryStyle";
 
 export default function BudgetProgress({ budgets, categories, transactions, onDelete }) {
-  const getCategoryName = (id) => categories.find((c) => Number(c.id) === Number(id))?.name || "Inconnue";
+  const getCategoryName = (id) =>
+    categories.find((c) => Number(c.id) === Number(id))?.name || "Inconnue";
 
   const getSpent = (categoryId, month) => {
     const monthPrefix = month.slice(0, 7);
@@ -23,17 +24,27 @@ export default function BudgetProgress({ budgets, categories, transactions, onDe
     try {
       await deleteBudget(id);
       onDelete(id);
-    } catch{
+    } catch {
       alert("Erreur lors de la suppression du budget");
     }
   };
 
   if (budgets.length === 0) {
-    return <p style={{ color: "var(--slate)" }}>Aucun budget défini pour ce mois.</p>;
+    return (
+      <p style={{ color: "var(--slate)" }}>
+        Aucun budget défini pour ce mois.
+      </p>
+    );
   }
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18 }}>
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)",
+        gap: 18,
+      }}
+    >
       {budgets.map((b) => {
         const limit = parseFloat(b.limit_amount);
         const spent = getSpent(b.category, b.month);
@@ -42,26 +53,19 @@ export default function BudgetProgress({ budgets, categories, transactions, onDe
 
         return (
           <div key={b.id} className="card" style={{ textAlign: "center" }}>
+            <BudgetRing percentage={percentage} over={over} />
+
             <div
               style={{
-                width: 38,
-                height: 38,
-                borderRadius: 10,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                margin: "0 auto 12px",
-                background: getCategoryStyle(b.category).bg,
-                color: getCategoryStyle(b.category).color,
+                fontSize: 15,
                 fontWeight: 700,
+                marginBottom: 2,
+                color: getCategoryStyle(b.category).color,
               }}
             >
-              {getCategoryName(b.category).charAt(0)}
-            </div>
-            <BudgetRing percentage={percentage} over={over} />
-            <div style={{ fontSize: 13.8, fontWeight: 600, marginBottom: 2 }}>
               {getCategoryName(b.category)}
             </div>
+
             <div
               style={{
                 fontSize: 11.8,
@@ -72,7 +76,11 @@ export default function BudgetProgress({ budgets, categories, transactions, onDe
             >
               {spent.toFixed(0)} / {limit.toFixed(0)} F
             </div>
-            <button className="btn-ghost" onClick={() => handleDelete(b.id)}>
+
+            <button
+              className="btn-ghost"
+              onClick={() => handleDelete(b.id)}
+            >
               Supprimer
             </button>
           </div>

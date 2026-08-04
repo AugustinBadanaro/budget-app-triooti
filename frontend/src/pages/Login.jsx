@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { login } from "../services/auth";
+import Logo from "../components/Logo";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -30,24 +31,7 @@ export default function Login() {
       }}
     >
       <form onSubmit={handleSubmit} className="card" style={{ width: 390, padding: "42px 38px" }}>
-        <div
-          style={{
-            width: 34,
-            height: 34,
-            borderRadius: 10,
-            background: "linear-gradient(135deg, var(--rose), #A8195A)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#fff",
-            fontFamily: "Fraunces, serif",
-            fontWeight: 700,
-            fontSize: 16,
-            marginBottom: 18,
-          }}
-        >
-          B
-        </div>
+        <Logo size={34} />
         <h1 style={{ fontSize: 25, marginBottom: 6 }}>Bon retour</h1>
         <p style={{ color: "var(--slate)", fontSize: 13.5, marginBottom: 26 }}>
           Connectez-vous pour suivre vos dépenses
