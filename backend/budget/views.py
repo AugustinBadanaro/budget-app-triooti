@@ -99,3 +99,49 @@ class RegisterView(generics.CreateAPIView):
     queryset = RegisterSerializer.Meta.model.objects.all()
     serializer_class = RegisterSerializer
     permission_classes = [permissions.AllowAny]
+
+class RebalanceGroupView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        month = request.data.get('month')  # format "YYYY-MM"
+        group = request.data.get('group')
+        if not month or not group:
+            return Response({'error': 'month et group requis'}, status=400)
+
+        try:
+            profile = UserProfile.objects.get(user=request.user)
+        except UserProfile.DoesNotExist:
+            return Response({'error': "Aucun revenu enregistré. Fais d'abord une répartition automatique."}, status=400)
+
+        income = float(profile.monthly_income or 0)
+        if income <= 0:
+            return Response({'error': "Aucun revenu enregistré. Fais d'abord une répartition automatique."}, status=400)
+
+        percentages = {'essential': 0.5, 'variable': 0.3, 'savings': 0.2}
+        categories = Category.objects.filter(user=request.user, group=group)
+        count = categories.count()
+        if count == 0:
+            return Response({'error': 'Aucune catégorie dans ce groupe'}, status=400)
+
+        share = percentages.get(group, 0.3) / count
+        amount = round(income * share, 2)
+
+        year, mon = map(int, month.split('-'))
+        month_date = date(year, mon, 1)
+
+        results = []
+        for cat in categories:
+            budget, _ = Budget.objects.update_or_create(
+                user=request.user, category=cat, month=month_date,
+                defaults={'limit_amount': amount}
+            )
+            results.append({
+                'id': budget.id,
+                'category': cat.id,
+                'category_name': cat.name,
+                'limit_amount': str(budget.limit_amount),
+                'month': str(budget.month),
+            })
+
+        return Response(results)
