@@ -23,7 +23,7 @@ export default function BudgetProgress({ budgets, categories, transactions, onDe
     try {
       await deleteBudget(id);
       onDelete(id);
-    } catch (err) {
+    } catch{
       alert("Erreur lors de la suppression du budget");
     }
   };

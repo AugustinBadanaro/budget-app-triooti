@@ -5,7 +5,7 @@ import { exportToExcel, exportToPDF } from "../services/export";
 import { getCurrency, setCurrency as saveCurrency, getNotifications, setNotifications as saveNotifications } from "../services/settings";
 
 export default function Settings() {
-  const { categories, setCategories, transactions } = useOutletContext();
+  const { categories, setCategories, transactions, budgets, setBudgets, selectedMonth } = useOutletContext();
 
   const [currency, setCurrencyState] = useState(getCurrency());
   const [notif, setNotif] = useState(getNotifications());
@@ -44,6 +44,14 @@ export default function Settings() {
 
   const switchRow = { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 0", borderBottom: "1px solid var(--line)" };
 
+  const handleBudgetsRebalanced = (updatedBudgets) => {
+    const updatedCategoryIds = updatedBudgets.map((b) => Number(b.category));
+    const kept = budgets.filter(
+      (b) => !(updatedCategoryIds.includes(Number(b.category)) && b.month?.startsWith(selectedMonth))
+    );
+    setBudgets([...kept, ...updatedBudgets]);
+  };
+
   return (
     <div>
       <h2>Paramètres</h2>
@@ -54,7 +62,12 @@ export default function Settings() {
           <div style={{ fontSize: 12.3, color: "var(--slate)", marginBottom: 16 }}>
             Ajoutez ou retirez des catégories de dépenses
           </div>
-          <CategoryManager categories={categories} onCategoriesChange={setCategories} />
+          <CategoryManager
+            categories={categories}
+            onCategoriesChange={setCategories}
+            selectedMonth={selectedMonth}
+            onBudgetsRebalanced={handleBudgetsRebalanced}
+          />
         </div>
 
         <div className="card">

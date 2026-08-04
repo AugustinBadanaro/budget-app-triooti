@@ -17,3 +17,6 @@ export const createCategory = (data) => api.post("categories/", data).then((r) =
 export const deleteCategory = (id) => api.delete(`categories/${id}/`);
 
 export const deleteBudget = (id) => api.delete(`budgets/${id}/`);
+
+export const rebalanceGroup = (month, group) =>
+  api.post("budgets/rebalance/", { month, group }).then((r) => r.data);

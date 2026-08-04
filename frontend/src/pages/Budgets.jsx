@@ -6,16 +6,17 @@ import BudgetAlertBanner from "../components/BudgetAlertBanner";
 export default function Budgets() {
   const { transactions, budgets, setBudgets, categories, selectedMonth } = useOutletContext();
 
-  const filtered = transactions.filter((t) => t.date?.startsWith(selectedMonth));
+  const filteredTransactions = transactions.filter((t) => t.date?.startsWith(selectedMonth));
+  const monthBudgets = budgets.filter((b) => b.month?.startsWith(selectedMonth));
 
   return (
     <div>
       <h2>Budgets</h2>
 
       <BudgetAlertBanner
-        budgets={budgets}
+        budgets={monthBudgets}
         categories={categories}
-        transactions={filtered}
+        transactions={filteredTransactions}
         selectedMonth={selectedMonth}
       />
 
@@ -26,9 +27,9 @@ export default function Budgets() {
       />
 
       <BudgetProgress
-        budgets={budgets}
+        budgets={monthBudgets}
         categories={categories}
-        transactions={filtered}
+        transactions={filteredTransactions}
         onDelete={(id) => setBudgets(budgets.filter((b) => b.id !== id))}
       />
     </div>

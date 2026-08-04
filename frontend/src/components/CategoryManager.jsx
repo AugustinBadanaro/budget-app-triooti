@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { createCategory, deleteCategory } from "../services/transactions";
+import { rebalanceGroup } from "../services/transactions";
 
-export default function CategoryManager({ categories, onCategoriesChange }) {
+export default function CategoryManager({ categories, onCategoriesChange, selectedMonth, onBudgetsRebalanced }) {
   const [name, setName] = useState("");
   const [group, setGroup] = useState("essential");
   const [error, setError] = useState("");
@@ -13,7 +14,14 @@ export default function CategoryManager({ categories, onCategoriesChange }) {
       const newCat = await createCategory({ name, group });
       onCategoriesChange([...categories, newCat]);
       setName("");
-    } catch (err) {
+
+      try {
+        const updatedBudgets = await rebalanceGroup(selectedMonth, group);
+        onBudgetsRebalanced(updatedBudgets);
+      } catch {
+        // Pas de revenu enregistré encore : catégorie créée sans budget associé, ce n'est pas bloquant.
+      }
+    } catch {
       setError("Erreur : nom déjà utilisé ou invalide");
     }
   };
@@ -23,7 +31,7 @@ export default function CategoryManager({ categories, onCategoriesChange }) {
     try {
       await deleteCategory(id);
       onCategoriesChange(categories.filter((c) => c.id !== id));
-    } catch (err) {
+    } catch{
       alert("Erreur : impossible de supprimer (catégorie utilisée par des transactions ?)");
     }
   };
