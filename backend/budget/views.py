@@ -3,6 +3,12 @@ from .models import Category, Transaction, Budget, UserProfile
 from .serializers import CategorySerializer, TransactionSerializer, BudgetSerializer, UserProfileSerializer
 from datetime import date
 from django.db import models
+from rest_framework import generics, permissions
+from .serializers import RegisterSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import UserProfile
+from .models import Category
 
 class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
@@ -58,9 +64,7 @@ class BudgetViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from .models import UserProfile
+
 
 class AutoBudgetView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -89,3 +93,9 @@ class AutoBudgetView(APIView):
                 'suggested_amount': round(income * share, 2)
             })
         return Response(result)
+
+
+class RegisterView(generics.CreateAPIView):
+    queryset = RegisterSerializer.Meta.model.objects.all()
+    serializer_class = RegisterSerializer
+    permission_classes = [permissions.AllowAny]

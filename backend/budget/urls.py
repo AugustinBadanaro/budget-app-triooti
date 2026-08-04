@@ -1,12 +1,20 @@
-from rest_framework.routers import DefaultRouter
 from django.urls import path
-from .views import CategoryViewSet, TransactionViewSet, BudgetViewSet, AutoBudgetView
+from rest_framework.routers import DefaultRouter
+
+from .views import (
+    CategoryViewSet,
+    TransactionViewSet,
+    BudgetViewSet,
+    AutoBudgetView,
+    RegisterView,
+)
 
 router = DefaultRouter()
-router.register('categories', CategoryViewSet, basename='category')
-router.register('transactions', TransactionViewSet, basename='transaction')
-router.register('budgets', BudgetViewSet, basename='budget')
+router.register(r'categories', CategoryViewSet, basename='category')
+router.register(r'transactions', TransactionViewSet, basename='transaction')
+router.register(r'budgets', BudgetViewSet, basename='budget')
 
 urlpatterns = [
     path('budgets/auto/', AutoBudgetView.as_view(), name='auto-budget'),
+    path('register/', RegisterView.as_view(), name='register'),
 ] + router.urls
