@@ -9,6 +9,7 @@ DEFAULT_CATEGORIES = [
     ("Transport", "variable"),
     ("Télécom", "variable"),
     ("Loisirs", "variable"),
+    ("Santé", "variable"),
     ("Épargne", "savings"),
 ]
 
