@@ -1,6 +1,7 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 from .views import RebalanceGroupView
+from .views import ProfileView
 
 from .views import (
     CategoryViewSet,
@@ -19,4 +20,5 @@ urlpatterns = [
     path('budgets/auto/', AutoBudgetView.as_view(), name='auto-budget'),
     path('register/', RegisterView.as_view(), name='register'),
     path("budgets/rebalance/", RebalanceGroupView.as_view(), name="rebalance-group"),
+    path("profile/", ProfileView.as_view(), name="profile"),
 ] + router.urls

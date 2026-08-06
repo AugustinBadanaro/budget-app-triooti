@@ -145,3 +145,10 @@ class RebalanceGroupView(APIView):
             })
 
         return Response(results)
+
+class ProfileView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        profile, _ = UserProfile.objects.get_or_create(user=request.user)
+        return Response({'monthly_income': profile.monthly_income or 0})
