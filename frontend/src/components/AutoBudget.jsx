@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { getAutoBudgetSuggestions, createBudget } from "../services/transactions";
 import { createTransaction } from "../services/transactions";
+import ErrorBanner from "../components/ErrorBanner";
 
 export default function AutoBudget({ month, budgets, categories, onBudgetsCreated, onTransactionCreated }) {
 const [income, setIncome] = useState("");
@@ -8,16 +9,20 @@ const [suggestions, setSuggestions] = useState([]);
 const [error, setError] = useState("");
 const [saving, setSaving] = useState(false);
 const [validated, setValidated] = useState(false);
+const [calculating, setCalculating] = useState(false);
 
   const handleCalculate = async (e) => {
     e.preventDefault();
     setError("");
     setValidated(false);
+    setCalculating(true);
     try {
       const data = await getAutoBudgetSuggestions(parseFloat(income));
       setSuggestions(data);
     } catch (err) {
-      setError("Erreur : revenu invalide ou aucune catégorie disponible");
+      setError(err.response?.data?.detail || "Erreur : revenu invalide ou aucune catégorie disponible");
+    } finally {
+      setCalculating(false);
     }
   };
 
@@ -30,6 +35,7 @@ const [validated, setValidated] = useState(false);
   };
 
   const handleValidate = async () => {
+    if (validated) return;
     const existingCategoryIds = budgets
      .filter((b) => b.month === `${month}-01`)
       .map((b) => Number(b.category));
@@ -43,7 +49,6 @@ const [validated, setValidated] = useState(false);
     return;
   }
     setSaving(true);
-    if (validated) return;
     setValidated(true);
     setError("");
     try {
@@ -61,16 +66,16 @@ const [validated, setValidated] = useState(false);
       setSuggestions([]);
       setIncome("");
     } catch (err) {
-      setError("Erreur lors de l'enregistrement des budgets");
-    } finally {
-      setSaving(false);
-    }
-  };
+        setError(err.response?.data?.detail || "Erreur lors de l'enregistrement des budgets");
+      } finally {
+        setSaving(false);
+      }
+    };
 
-  return (
+    return (
     <div>
       <h3>Répartition automatique du revenu</h3>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <ErrorBanner message={error} />}
 
       <form onSubmit={handleCalculate} style={{ display: "flex", gap: 10, alignItems: "flex-end", marginBottom: 16 }}>
         <input
@@ -82,7 +87,10 @@ const [validated, setValidated] = useState(false);
           required
           style={{ width: 200 }}
         />
-        <button className="btn-primary" type="submit">Calculer</button>
+        <button className="btn-primary" type="submit" disabled={calculating}>
+          {calculating ? "Calcul..." : "Calculer"}
+        </button>
+      
       </form>
 
       {suggestions.length > 0 && (

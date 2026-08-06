@@ -1,6 +1,7 @@
 import { useOutletContext } from "react-router-dom";
 import { useState } from "react";
 import CategoryManager from "../components/CategoryManager";
+import ErrorBanner from "../components/ErrorBanner";
 import { exportToExcel, exportToPDF } from "../services/export";
 import { getCurrency, setCurrency as saveCurrency, getNotifications, setNotifications as saveNotifications } from "../services/settings";
 
@@ -9,6 +10,9 @@ export default function Settings() {
 
   const [currency, setCurrencyState] = useState(getCurrency());
   const [notif, setNotif] = useState(getNotifications());
+  const [exportError, setExportError] = useState(null);
+  const [exportingPDF, setExportingPDF] = useState(false);
+  const [exportingExcel, setExportingExcel] = useState(false);
 
   const handleCurrencyChange = (value) => {
     setCurrencyState(value);
@@ -19,6 +23,30 @@ export default function Settings() {
     const updated = { ...notif, [key]: !notif[key] };
     setNotif(updated);
     saveNotifications(updated);
+  };
+
+  const handleExportPDF = async () => {
+    setExportError(null);
+    setExportingPDF(true);
+    try {
+      await exportToPDF(transactions, categories);
+    } catch (err) {
+      setExportError("Erreur lors de l'export PDF.");
+    } finally {
+      setExportingPDF(false);
+    }
+  };
+
+  const handleExportExcel = async () => {
+    setExportError(null);
+    setExportingExcel(true);
+    try {
+      await exportToExcel(transactions, categories);
+    } catch (err) {
+      setExportError("Erreur lors de l'export Excel.");
+    } finally {
+      setExportingExcel(false);
+    }
   };
 
   const switchStyle = (on) => ({
@@ -40,7 +68,7 @@ export default function Settings() {
     background: "#fff",
     borderRadius: "50%",
     transition: ".15s",
-  }); 
+  });
 
   const switchRow = { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 0", borderBottom: "1px solid var(--line)" };
 
@@ -125,12 +153,13 @@ export default function Settings() {
           <div style={{ fontSize: 12.3, color: "var(--slate)", marginBottom: 16 }}>
             Télécharger l'historique complet des transactions
           </div>
+          {exportError && <ErrorBanner message={exportError} />}
           <div style={{ display: "flex", gap: 10 }}>
-            <button className="btn-ghost" onClick={() => exportToPDF(transactions, categories)}>
-              Export PDF
+            <button className="btn-ghost" onClick={handleExportPDF} disabled={exportingPDF}>
+              {exportingPDF ? "Export..." : "Export PDF"}
             </button>
-            <button className="btn-ghost" onClick={() => exportToExcel(transactions, categories)}>
-              Export Excel
+            <button className="btn-ghost" onClick={handleExportExcel} disabled={exportingExcel}>
+              {exportingExcel ? "Export..." : "Export Excel"}
             </button>
           </div>
         </div>

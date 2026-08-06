@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createTransaction } from "../services/transactions";
+import ErrorBanner from "./ErrorBanner";
 
 export default function TransactionForm({ categories, onTransactionAdded, selectedMonth }) {
   const [amount, setAmount] = useState("");
@@ -7,11 +8,13 @@ export default function TransactionForm({ categories, onTransactionAdded, select
   const [description, setDescription] = useState("");
   const [day, setDay] = useState(new Date().getDate());
   const [statusMessage, setStatusMessage] = useState(null);
-  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setSubmitting(true);
+    setFormError(null);
     setStatusMessage(null);
     try {
       const result = await createTransaction({
@@ -24,14 +27,21 @@ export default function TransactionForm({ categories, onTransactionAdded, select
       setStatusMessage(result.budget_status?.message || null);
       setAmount("");
       setDescription("");
+      setDay(new Date().getDate());
       onTransactionAdded(result);
     } catch (err) {
-      setError("Erreur lors de l'ajout de la transaction");
+      setFormError(err.response?.data?.detail || "Une erreur est survenue lors de l'enregistrement.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
     <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      <h3>Nouvelle dépense</h3>
+
+      {formError && <ErrorBanner message={formError} />}
+      {statusMessage && <p style={{ color: "orange" }}>{statusMessage}</p>}
 
       <div className="field">
         <label>Jour du mois</label>
@@ -44,10 +54,6 @@ export default function TransactionForm({ categories, onTransactionAdded, select
           required
         />
       </div>
-      
-      <h3>Nouvelle dépense</h3>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {statusMessage && <p style={{ color: "orange" }}>{statusMessage}</p>}
 
       <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required>
         <option value="">-- Choisir une catégorie --</option>
@@ -72,9 +78,18 @@ export default function TransactionForm({ categories, onTransactionAdded, select
         onChange={(e) => setDescription(e.target.value)}
       />
 
-      <button className="btn-primary" type="submit" style={{ marginTop: 8, marginBottom: 24, width: "fit-content", display: "inline-block", 
-    }}>
-        Ajouter
+      <button
+        className="btn-primary"
+        type="submit"
+        disabled={submitting}
+        style={{
+          marginTop: 8,
+          marginBottom: 24,
+          width: "fit-content",
+          alignSelf: "flex-start",
+        }}
+      >
+        {submitting ? "Enregistrement..." : "Valider"}
       </button>
     </form>
   );
