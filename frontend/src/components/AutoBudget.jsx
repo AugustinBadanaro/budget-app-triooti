@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { getAutoBudgetSuggestions, createBudget } from "../services/transactions";
+import { createTransaction } from "../services/transactions";
 
-export default function AutoBudget({ month, budgets, onBudgetsCreated }) {
+export default function AutoBudget({ month, budgets, categories, onBudgetsCreated, onTransactionCreated }) {
 const [income, setIncome] = useState("");
 const [suggestions, setSuggestions] = useState([]);
 const [error, setError] = useState("");
@@ -56,6 +57,19 @@ const [validated, setValidated] = useState(false);
         )
       );
       onBudgetsCreated(created);
+
+      const savingsCat = categories.find((c) => c.group === "savings");
+      if (savingsCat) {
+        const incomeTx = await createTransaction({
+          amount: parseFloat(income),
+          category: savingsCat.id,
+          type: "income",
+          description: "Revenu mensuel (répartition automatique)",
+          date: `${month}-01`,
+        });
+        onTransactionCreated(incomeTx);
+      }
+
       setSuggestions([]);
       setIncome("");
     } catch (err) {

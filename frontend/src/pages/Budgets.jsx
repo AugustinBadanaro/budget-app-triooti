@@ -4,7 +4,7 @@ import AutoBudget from "../components/AutoBudget";
 import BudgetAlertBanner from "../components/BudgetAlertBanner";
 
 export default function Budgets() {
-  const { transactions, budgets, setBudgets, categories, selectedMonth } = useOutletContext();
+  const { transactions, setTransactions, budgets, setBudgets, categories, selectedMonth } = useOutletContext();
 
   const filteredTransactions = transactions.filter((t) => t.date?.startsWith(selectedMonth));
   const monthBudgets = budgets.filter((b) => b.month?.startsWith(selectedMonth));
@@ -23,7 +23,9 @@ export default function Budgets() {
       <AutoBudget
         month={selectedMonth}
         budgets={budgets}
+        categories={categories}
         onBudgetsCreated={(newBudgets) => setBudgets([...budgets, ...newBudgets])}
+        onTransactionCreated={(newTx) => setTransactions([newTx, ...transactions])}
       />
 
       <BudgetProgress

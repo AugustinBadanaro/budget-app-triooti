@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { createTransaction } from "../services/transactions";
 
-export default function TransactionForm({ categories, onTransactionAdded }) {
+export default function TransactionForm({ categories, onTransactionAdded, selectedMonth }) {
   const [amount, setAmount] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("expense");
   const [statusMessage, setStatusMessage] = useState(null);
   const [error, setError] = useState("");
+  const [day, setDay] = useState(new Date().getDate());
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,8 +19,8 @@ export default function TransactionForm({ categories, onTransactionAdded }) {
         amount: parseFloat(amount),
         category: categoryId,
         description,
-        date: new Date().toISOString().split("T")[0],
         type,
+        date: `${selectedMonth}-${String(day).padStart(2, "0")}`,
       });
       setStatusMessage(result.budget_status?.message || null);
       setAmount("");
@@ -32,10 +33,22 @@ export default function TransactionForm({ categories, onTransactionAdded }) {
 
   return (
     <form onSubmit={handleSubmit}>
+      <div className="field">
+        <label>Jour du mois</label>
+        <input
+          type="number"
+          min="1"
+          max="31"
+          value={day}
+          onChange={(e) => setDay(e.target.value)}
+          required
+        />
+      </div>
+      
       <h3>Nouvelle transaction</h3>
       {error && <p style={{ color: "red" }}>{error}</p>}
       {statusMessage && <p style={{ color: "orange" }}>{statusMessage}</p>}
-
+      
       <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required>
         <option value="">-- Choisir une catégorie --</option>
         {categories.map((c) => (
@@ -73,7 +86,7 @@ export default function TransactionForm({ categories, onTransactionAdded }) {
             boxShadow: type === "expense" ? "0 2px 6px rgba(0,0,0,.06)" : "none",
           }}
         >
-          ↓ Dépense
+          Dépense
         </button>
         <button
           type="button"
@@ -96,7 +109,7 @@ export default function TransactionForm({ categories, onTransactionAdded }) {
             boxShadow: type === "income" ? "0 2px 6px rgba(0,0,0,.06)" : "none",
           }}
         >
-          ↑ Revenu
+          Revenu
         </button>
       </div>
 
@@ -115,7 +128,7 @@ export default function TransactionForm({ categories, onTransactionAdded }) {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-
+      
       <button className="btn-primary" type="submit" style={{ marginTop: 8, marginBottom: 24 }}>
         Ajouter
       </button>

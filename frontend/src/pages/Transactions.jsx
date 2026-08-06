@@ -34,6 +34,7 @@ export default function Transactions() {
       <TransactionForm
         categories={categories}
         onTransactionAdded={(newT) => setTransactions([newT, ...transactions])}
+        selectedMonth={selectedMonth}
       />
 
       <TransactionFilters categories={categories} onFilterChange={setFilters} />

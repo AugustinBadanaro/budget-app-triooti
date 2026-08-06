@@ -22,7 +22,7 @@ export default function TransactionList({ transactions, categories, onDelete, on
     try {
       await deleteTransaction(id);
       onDelete(id);
-    } catch (err) {
+    } catch{
       alert("Erreur lors de la suppression");
     }
   };
@@ -47,7 +47,7 @@ export default function TransactionList({ transactions, categories, onDelete, on
       });
       onUpdate(updated);
       cancelEdit();
-    } catch (err) {
+    } catch{
       alert("Erreur lors de la modification");
     }
   };
