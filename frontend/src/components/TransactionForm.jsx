@@ -5,10 +5,9 @@ export default function TransactionForm({ categories, onTransactionAdded, select
   const [amount, setAmount] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [description, setDescription] = useState("");
-  const [type, setType] = useState("expense");
+  const [day, setDay] = useState(new Date().getDate());
   const [statusMessage, setStatusMessage] = useState(null);
   const [error, setError] = useState("");
-  const [day, setDay] = useState(new Date().getDate());
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +18,7 @@ export default function TransactionForm({ categories, onTransactionAdded, select
         amount: parseFloat(amount),
         category: categoryId,
         description,
-        type,
+        type: "expense",
         date: `${selectedMonth}-${String(day).padStart(2, "0")}`,
       });
       setStatusMessage(result.budget_status?.message || null);
@@ -32,7 +31,8 @@ export default function TransactionForm({ categories, onTransactionAdded, select
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+
       <div className="field">
         <label>Jour du mois</label>
         <input
@@ -45,73 +45,16 @@ export default function TransactionForm({ categories, onTransactionAdded, select
         />
       </div>
       
-      <h3>Nouvelle transaction</h3>
+      <h3>Nouvelle dépense</h3>
       {error && <p style={{ color: "red" }}>{error}</p>}
       {statusMessage && <p style={{ color: "orange" }}>{statusMessage}</p>}
-      
+
       <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required>
         <option value="">-- Choisir une catégorie --</option>
         {categories.map((c) => (
           <option key={c.id} value={c.id}>{c.name}</option>
         ))}
       </select>
-
-      <div
-        style={{
-          display: "flex",
-            background: "var(--rose-soft)",
-            borderRadius: 11,
-            padding: 4,
-            marginBottom: 18,
-        }}
-      >
-        <button
-          type="button"
-          onClick={() => setType("expense")}
-          style={{
-            flex: 1,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 7,
-            border: "none",
-            padding: 10,
-            borderRadius: 9,
-            fontSize: 13.3,
-            fontWeight: 600,
-            cursor: "pointer",
-            color: "var(--rose)",
-            background: type === "expense" ? "var(--white)" : "transparent",
-            opacity: type === "expense" ? 1 : 0.55,
-            boxShadow: type === "expense" ? "0 2px 6px rgba(0,0,0,.06)" : "none",
-          }}
-        >
-          Dépense
-        </button>
-        <button
-          type="button"
-          onClick={() => setType("income")}
-          style={{
-            flex: 1,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 7,
-            border: "none",
-            padding: 10,
-            borderRadius: 9,
-            fontSize: 13.3,
-            fontWeight: 600,
-            cursor: "pointer",
-            color: "var(--rose)",
-            background: type === "income" ? "var(--white)" : "transparent",
-            opacity: type === "income" ? 1 : 0.55,
-            boxShadow: type === "income" ? "0 2px 6px rgba(0,0,0,.06)" : "none",
-          }}
-        >
-          Revenu
-        </button>
-      </div>
 
       <input
         type="number"
@@ -128,8 +71,9 @@ export default function TransactionForm({ categories, onTransactionAdded, select
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      
-      <button className="btn-primary" type="submit" style={{ marginTop: 8, marginBottom: 24 }}>
+
+      <button className="btn-primary" type="submit" style={{ marginTop: 8, marginBottom: 24, width: "fit-content", display: "inline-block", 
+    }}>
         Ajouter
       </button>
     </form>

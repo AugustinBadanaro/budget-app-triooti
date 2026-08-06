@@ -1,15 +1,12 @@
 import { formatAmount } from "../services/currency";
 
-export default function StatCards({ transactions }) {
-  const income = transactions
-    .filter((t) => t.type === "income")
-    .reduce((sum, t) => sum + parseFloat(t.amount), 0);
+export default function StatCards({ transactions, monthlyIncome }) {
+  const expenses = transactions.reduce(
+    (sum, t) => sum + parseFloat(t.amount),
+    0
+  );
 
-  const expenses = transactions
-    .filter((t) => t.type === "expense")
-    .reduce((sum, t) => sum + parseFloat(t.amount), 0);
-
-  const balance = income - expenses;
+  const balance = monthlyIncome - expenses;
 
   const cardStyle = {
     padding: 22,
@@ -41,32 +38,7 @@ export default function StatCards({ transactions }) {
         marginBottom: 22,
       }}
     >
-      <div className="card" style={cardStyle}>
-        <div style={iconStyle("var(--rose-soft)", "var(--rose)")}>
-          Solde
-        </div>
-
-        <div
-          style={{
-            fontSize: 12,
-            color: "var(--slate)",
-            fontWeight: 600,
-          }}
-        >
-          Solde disponible
-        </div>
-
-        <div
-          style={{
-            fontFamily: "Fraunces, serif",
-            fontSize: 28,
-            marginTop: 6,
-          }}
-        >
-          {formatAmount(balance)}
-        </div>
-      </div>
-
+      {/* Revenus */}
       <div className="card" style={cardStyle}>
         <div style={iconStyle("var(--success-soft)", "var(--success)")}>
           Revenus
@@ -79,7 +51,7 @@ export default function StatCards({ transactions }) {
             fontWeight: 600,
           }}
         >
-          Revenus du mois
+          Revenu mensuel
         </div>
 
         <div
@@ -89,10 +61,11 @@ export default function StatCards({ transactions }) {
             marginTop: 6,
           }}
         >
-          {formatAmount(income)}
+          {formatAmount(monthlyIncome)}
         </div>
       </div>
 
+      {/* Dépenses */}
       <div className="card" style={cardStyle}>
         <div style={iconStyle("var(--alert-soft)", "var(--alert)")}>
           Dépenses
@@ -117,6 +90,33 @@ export default function StatCards({ transactions }) {
           }}
         >
           {formatAmount(expenses)}
+        </div>
+      </div>
+
+      {/* Solde */}
+      <div className="card" style={cardStyle}>
+        <div style={iconStyle("var(--rose-soft)", "var(--rose)")}>
+          Solde
+        </div>
+
+        <div
+          style={{
+            fontSize: 12,
+            color: "var(--slate)",
+            fontWeight: 600,
+          }}
+        >
+          Solde disponible
+        </div>
+
+        <div
+          style={{
+            fontFamily: "Fraunces, serif",
+            fontSize: 28,
+            marginTop: 6,
+          }}
+        >
+          {formatAmount(balance)}
         </div>
       </div>
     </div>

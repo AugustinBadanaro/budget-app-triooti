@@ -1,22 +1,29 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
-import { getTransactions, getBudgets, getCategories } from "../services/transactions";
+import { getTransactions, getBudgets, getCategories, getProfile } from "../services/transactions";
 
 export default function Layout() {
   const [transactions, setTransactions] = useState([]);
   const [budgets, setBudgets] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [monthlyIncome, setMonthlyIncome] = useState(0);
   const [loading, setLoading] = useState(true);
   const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
 
   useEffect(() => {
     const load = async () => {
       try {
-        const [t, b, c] = await Promise.all([getTransactions(), getBudgets(), getCategories()]);
+        const [t, b, c, p] = await Promise.all([
+          getTransactions(),
+          getBudgets(),
+          getCategories(),
+          getProfile(),
+        ]);
         setTransactions(t);
         setBudgets(b);
         setCategories(c);
+        setMonthlyIncome(parseFloat(p.monthly_income) || 0);
       } catch (err) {
         console.error(err);
       } finally {
@@ -35,6 +42,8 @@ export default function Layout() {
     setBudgets,
     categories,
     setCategories,
+    monthlyIncome,
+    setMonthlyIncome,
     selectedMonth,
     setSelectedMonth,
   };

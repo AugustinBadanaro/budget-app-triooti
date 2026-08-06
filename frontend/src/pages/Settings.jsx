@@ -71,19 +71,6 @@ export default function Settings() {
         </div>
 
         <div className="card">
-          <h3 style={{ fontSize: 14.5, marginBottom: 4, fontWeight: 600 }}>Devise</h3>
-          <div style={{ fontSize: 12.3, color: "var(--slate)", marginBottom: 16 }}>
-            Utilisée pour tous les montants affichés
-          </div>
-          <select value={currency} onChange={(e) => handleCurrencyChange(e.target.value)}>
-            <option value="XOF">FCFA (XOF)</option>
-            <option value="EUR">Euro (EUR)</option>
-            <option value="USD">Dollar (USD)</option>
-            <option value="GHS">Cedi (GHS)</option>
-          </select>
-        </div>
-
-        <div className="card">
           <h3 style={{ fontSize: 14.5, marginBottom: 4, fontWeight: 600 }}>Notifications</h3>
           <div style={{ fontSize: 12.3, color: "var(--slate)", marginBottom: 16 }}>
             Alertes envoyées en cas de dépassement
@@ -118,6 +105,19 @@ export default function Settings() {
               <div style={knobStyle(notif.reminder)} />
             </div>
           </div>
+        </div>
+
+        <div className="card">
+          <h3 style={{ fontSize: 14.5, marginBottom: 4, fontWeight: 600 }}>Devise</h3>
+          <div style={{ fontSize: 12.3, color: "var(--slate)", marginBottom: 16 }}>
+            Utilisée pour tous les montants affichés
+          </div>
+          <select value={currency} onChange={(e) => handleCurrencyChange(e.target.value)}>
+            <option value="XOF">FCFA (XOF)</option>
+            <option value="EUR">Euro (EUR)</option>
+            <option value="USD">Dollar (USD)</option>
+            <option value="GHS">Cedi (GHS)</option>
+          </select>
         </div>
 
         <div className="card">

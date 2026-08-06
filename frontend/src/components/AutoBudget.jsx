@@ -58,18 +58,6 @@ const [validated, setValidated] = useState(false);
       );
       onBudgetsCreated(created);
 
-      const savingsCat = categories.find((c) => c.group === "savings");
-      if (savingsCat) {
-        const incomeTx = await createTransaction({
-          amount: parseFloat(income),
-          category: savingsCat.id,
-          type: "income",
-          description: "Revenu mensuel (répartition automatique)",
-          date: `${month}-01`,
-        });
-        onTransactionCreated(incomeTx);
-      }
-
       setSuggestions([]);
       setIncome("");
     } catch (err) {

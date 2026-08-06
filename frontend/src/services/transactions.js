@@ -20,3 +20,5 @@ export const deleteBudget = (id) => api.delete(`budgets/${id}/`);
 
 export const rebalanceGroup = (month, group) =>
   api.post("budgets/rebalance/", { month, group }).then((r) => r.data);
+
+export const getProfile = () => api.get("profile/").then((r) => r.data);

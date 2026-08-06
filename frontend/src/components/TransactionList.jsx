@@ -114,15 +114,6 @@ export default function TransactionList({ transactions, categories, onDelete, on
         editingId === t.id ? (
           <div key={t.id} style={{ ...rowStyle, gap: 10, flexWrap: "wrap" }}>
             <select
-              value={editData.category}
-              onChange={(e) => setEditData({ ...editData, category: e.target.value })}
-              style={{ width: "auto" }}
-            >
-              {categories.map((c) => (
-                <option key={c.id} value={c.id}>{c.name}</option>
-              ))}
-            </select>
-            <select
               value={editData.type}
               onChange={(e) => setEditData({ ...editData, type: e.target.value })}
               style={{ width: "auto" }}
@@ -167,10 +158,11 @@ export default function TransactionList({ transactions, categories, onDelete, on
                   fontFamily: "IBM Plex Mono, monospace",
                   fontSize: 13.8,
                   fontWeight: 500,
-                  color: t.type === "income" ? "var(--success)" : "var(--alert)",
+                  color: "var(--alert)",
                 }}
               >
-                {t.type === "income" ? "+" : "-"} {formatAmount(t.amount)}
+                - {formatAmount(t.amount)}
+
               </div>
               <button className="btn-ghost" onClick={() => startEdit(t)}>Modifier</button>
               <button className="btn-ghost" onClick={() => handleDelete(t.id)}>Supprimer</button>
