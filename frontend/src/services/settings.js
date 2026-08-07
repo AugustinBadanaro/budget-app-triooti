@@ -1,11 +1,15 @@
 const CURRENCY_KEY = "app_currency";
 const NOTIF_KEY = "app_notifications";
+const THRESHOLD_KEY = "app_alert_threshold";
+const DARKMODE_KEY = "app_dark_mode";
+
 
 export const getCurrency = () => localStorage.getItem(CURRENCY_KEY) || "XOF";
 export const setCurrency = (value) => localStorage.setItem(CURRENCY_KEY, value);
 
-export const getNotifications = () => {
-  const stored = localStorage.getItem(NOTIF_KEY);
-  return stored ? JSON.parse(stored) : { overBudget: true, weekly: false, reminder: true };
-};
-export const setNotifications = (prefs) => localStorage.setItem(NOTIF_KEY, JSON.stringify(prefs));
+export const getAlertThreshold = () => Number(localStorage.getItem(THRESHOLD_KEY)) || 100;
+export const setAlertThreshold = (value) => localStorage.setItem(THRESHOLD_KEY, value);
+
+export const getDarkMode = () => localStorage.getItem(DARKMODE_KEY) === "true";
+export const setDarkMode = (value) => localStorage.setItem(DARKMODE_KEY, value);
+

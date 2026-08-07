@@ -3,13 +3,14 @@ import { useState } from "react";
 import CategoryManager from "../components/CategoryManager";
 import ErrorBanner from "../components/ErrorBanner";
 import { exportToExcel, exportToPDF } from "../services/export";
-import { getCurrency, setCurrency as saveCurrency, getNotifications, setNotifications as saveNotifications } from "../services/settings";
+import { getCurrency, setCurrency as saveCurrency, getAlertThreshold, setAlertThreshold, getDarkMode, setDarkMode } from "../services/settings";
 
 export default function Settings() {
   const { categories, setCategories, transactions, budgets, setBudgets, selectedMonth } = useOutletContext();
 
   const [currency, setCurrencyState] = useState(getCurrency());
-  const [notif, setNotif] = useState(getNotifications());
+  const [threshold, setThreshold] = useState(getAlertThreshold());
+  const [darkMode, setDarkModeState] = useState(getDarkMode());
   const [exportError, setExportError] = useState(null);
   const [exportingPDF, setExportingPDF] = useState(false);
   const [exportingExcel, setExportingExcel] = useState(false);
@@ -19,10 +20,16 @@ export default function Settings() {
     saveCurrency(value);
   };
 
-  const toggleNotif = (key) => {
-    const updated = { ...notif, [key]: !notif[key] };
-    setNotif(updated);
-    saveNotifications(updated);
+  const handleThresholdChange = (value) => {
+    setThreshold(Number(value));
+    setAlertThreshold(value);
+  };
+
+  const handleDarkModeToggle = () => {
+    const next = !darkMode;
+    setDarkModeState(next);
+    setDarkMode(next);
+    document.body.classList.toggle("dark", next);
   };
 
   const handleExportPDF = async () => {
@@ -99,38 +106,30 @@ export default function Settings() {
         </div>
 
         <div className="card">
-          <h3 style={{ fontSize: 14.5, marginBottom: 4, fontWeight: 600 }}>Notifications</h3>
+          <h3 style={{ fontSize: 14.5, marginBottom: 4, fontWeight: 600 }}>Alertes de budget</h3>
           <div style={{ fontSize: 12.3, color: "var(--slate)", marginBottom: 16 }}>
-            Alertes envoyées en cas de dépassement
+            Seuil à partir duquel une alerte s'affiche sur la page Budgets
+          </div>
+          <div className="field">
+            <label>Seuil d'alerte : {threshold}%</label>
+            <input
+              type="range"
+              min="50"
+              max="100"
+              step="5"
+              value={threshold}
+              onChange={(e) => handleThresholdChange(e.target.value)}
+            />
           </div>
 
+          <h3 style={{ fontSize: 14.5, margin: "20px 0 4px", fontWeight: 600 }}>Apparence</h3>
           <div style={switchRow}>
             <div>
-              <div style={{ fontSize: 13.3, fontWeight: 500 }}>Alerte de dépassement de budget</div>
-              <div style={{ fontSize: 11.8, color: "var(--slate)" }}>Notification quand une catégorie dépasse sa limite</div>
+              <div style={{ fontSize: 13.3, fontWeight: 500 }}>Mode sombre</div>
+              <div style={{ fontSize: 11.8, color: "var(--slate)" }}>Change l'apparence de l'application</div>
             </div>
-            <div style={switchStyle(notif.overBudget)} onClick={() => toggleNotif("overBudget")}>
-              <div style={knobStyle(notif.overBudget)} />
-            </div>
-          </div>
-
-          <div style={switchRow}>
-            <div>
-              <div style={{ fontSize: 13.3, fontWeight: 500 }}>Résumé hebdomadaire</div>
-              <div style={{ fontSize: 11.8, color: "var(--slate)" }}>Récapitulatif envoyé chaque lundi</div>
-            </div>
-            <div style={switchStyle(notif.weekly)} onClick={() => toggleNotif("weekly")}>
-              <div style={knobStyle(notif.weekly)} />
-            </div>
-          </div>
-
-          <div style={{ ...switchRow, borderBottom: "none" }}>
-            <div>
-              <div style={{ fontSize: 13.3, fontWeight: 500 }}>Rappel de saisie</div>
-              <div style={{ fontSize: 11.8, color: "var(--slate)" }}>Si aucune transaction depuis 3 jours</div>
-            </div>
-            <div style={switchStyle(notif.reminder)} onClick={() => toggleNotif("reminder")}>
-              <div style={knobStyle(notif.reminder)} />
+            <div style={switchStyle(darkMode)} onClick={handleDarkModeToggle}>
+              <div style={knobStyle(darkMode)} />
             </div>
           </div>
         </div>
