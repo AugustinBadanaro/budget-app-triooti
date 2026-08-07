@@ -24,6 +24,7 @@ export default function Dashboard() {
         budgets={budgets}
         selectedMonth={selectedMonth}
         categories={categories}
+        monthlyIncome={monthlyIncome}
       />
 
       <ExpenseChart transactions={filtered} categories={categories} />
