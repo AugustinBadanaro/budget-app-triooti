@@ -6,7 +6,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 
 export default function ExpenseChart({ transactions, categories }) {
-  const getCategoryName = (id) => categories.find((c) => c.id === id)?.name || "Inconnue";
+  const getCategoryName = (id) => categories.find((c) => Number(c.id) === Number(id))?.name || "Inconnue";
 
   const totals = {};
   const colorsByLabel = {};
