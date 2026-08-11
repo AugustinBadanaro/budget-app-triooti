@@ -26,16 +26,16 @@ export default function CategoryManager({ categories, onCategoriesChange, select
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Supprimer cette catégorie ? Les transactions liées seront affectées.")) return;
+  const handleDelete = async (id, name) => {
+    const confirmMsg = `Supprimer la catégorie "${name}" ? Toutes les transactions et tous les budgets associés à cette catégorie seront définitivement supprimés. Cette action est irréversible.`;
+    if (!window.confirm(confirmMsg)) return;
     try {
       await deleteCategory(id);
       onCategoriesChange(categories.filter((c) => c.id !== id));
-    } catch{
-      alert("Erreur : impossible de supprimer (catégorie utilisée par des transactions ?)");
+    } catch {
+      alert("Erreur lors de la suppression de la catégorie.");
     }
   };
-
   return (
     <div>
       <h3>Catégories</h3>
@@ -62,7 +62,7 @@ export default function CategoryManager({ categories, onCategoriesChange, select
         {categories.map((c) => (
           <li key={c.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid var(--line)" }}>
             <span>{c.name} ({c.group})</span>
-            <button className="btn-ghost" onClick={() => handleDelete(c.id)}>
+            <button className="btn-ghost" onClick={() => handleDelete(c.id, c.name)}>
               Supprimer
             </button>
           </li>
