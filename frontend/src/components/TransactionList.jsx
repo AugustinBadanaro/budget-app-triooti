@@ -29,7 +29,7 @@ export default function TransactionList({ transactions, categories, onDelete, on
 
   const startEdit = (t) => {
     setEditingId(t.id);
-    setEditData({ amount: t.amount, category: t.category, type: t.type, description: t.description });
+    setEditData({ amount: t.amount, category: t.category, description: t.description });
   };
 
   const cancelEdit = () => {
@@ -42,7 +42,6 @@ export default function TransactionList({ transactions, categories, onDelete, on
       const updated = await updateTransaction(id, {
         amount: parseFloat(editData.amount),
         category: editData.category,
-        type: editData.type,
         description: editData.description,
       });
       onUpdate(updated);
@@ -113,14 +112,6 @@ export default function TransactionList({ transactions, categories, onDelete, on
       {transactions.map((t) =>
         editingId === t.id ? (
           <div key={t.id} style={{ ...rowStyle, gap: 10, flexWrap: "wrap" }}>
-            <select
-              value={editData.type}
-              onChange={(e) => setEditData({ ...editData, type: e.target.value })}
-              style={{ width: "auto" }}
-            >
-              <option value="expense">Dépense</option>
-              <option value="income">Revenu</option>
-            </select>
             <input
               type="number"
               step="0.01"
