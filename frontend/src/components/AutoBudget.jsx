@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { getAutoBudgetSuggestions, createBudget } from "../services/transactions";
-import { createTransaction } from "../services/transactions";
 import ErrorBanner from "../components/ErrorBanner";
 
-export default function AutoBudget({ month, budgets, categories, onBudgetsCreated, onTransactionCreated }) {
+export default function AutoBudget({ month, budgets, categories, onBudgetsCreated }) {
 const [income, setIncome] = useState("");
 const [suggestions, setSuggestions] = useState([]);
 const [error, setError] = useState("");

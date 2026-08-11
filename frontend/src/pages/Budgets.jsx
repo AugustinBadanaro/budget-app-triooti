@@ -25,7 +25,6 @@ export default function Budgets() {
         budgets={budgets}
         categories={categories}
         onBudgetsCreated={(newBudgets) => setBudgets([...budgets, ...newBudgets])}
-        onTransactionCreated={(newTx) => setTransactions([newTx, ...transactions])}
       />
 
       <BudgetProgress
