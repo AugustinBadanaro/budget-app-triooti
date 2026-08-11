@@ -1,5 +1,4 @@
 const CURRENCY_KEY = "app_currency";
-const NOTIF_KEY = "app_notifications";
 const THRESHOLD_KEY = "app_alert_threshold";
 const DARKMODE_KEY = "app_dark_mode";
 
