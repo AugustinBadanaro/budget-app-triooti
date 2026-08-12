@@ -75,10 +75,7 @@ class AutoBudgetView(APIView):
             return Response({'error': 'Revenu invalide'}, status=400)
 
         income = float(income)
-        profile, _ = UserProfile.objects.get_or_create(user=request.user)
-        profile.monthly_income = income
-        profile.save()
-
+        
         percentages = {'essential': 0.5, 'variable': 0.3, 'savings': 0.2}
         categories = Category.objects.filter(user=request.user)
         result = []
@@ -151,4 +148,12 @@ class ProfileView(APIView):
 
     def get(self, request):
         profile, _ = UserProfile.objects.get_or_create(user=request.user)
+        return Response({'monthly_income': profile.monthly_income or 0})
+
+    def patch(self, request):
+        profile, _ = UserProfile.objects.get_or_create(user=request.user)
+        income = request.data.get('monthly_income')
+        if income is not None:
+            profile.monthly_income = float(income)
+            profile.save()
         return Response({'monthly_income': profile.monthly_income or 0})
