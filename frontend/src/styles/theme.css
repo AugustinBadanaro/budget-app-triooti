@@ -78,3 +78,14 @@ body.dark {
   background: var(--rose-pale);
   color: var(--ink);
 }
+
+ul::-webkit-scrollbar {
+  width: 6px;
+}
+ul::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 10px;
+}
+ul::-webkit-scrollbar-track {
+  background: transparent;
+}
