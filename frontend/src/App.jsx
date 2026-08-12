@@ -8,6 +8,7 @@ import Settings from "./pages/Settings";
 import Layout from "./components/Layout";
 import { isAuthenticated } from "./services/auth";
 import Home from "./pages/Home";
+import Education from "./pages/Education";
 
 function PrivateLayout() {
   return isAuthenticated() ? <Layout /> : <Navigate to="/login" />;
@@ -25,6 +26,7 @@ function App() {
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/budgets" element={<Budgets />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/education" element={<Education />} />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
