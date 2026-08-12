@@ -12,3 +12,5 @@ export const setAlertThreshold = (value) => localStorage.setItem(THRESHOLD_KEY, 
 export const getDarkMode = () => localStorage.getItem(DARKMODE_KEY) === "true";
 export const setDarkMode = (value) => localStorage.setItem(DARKMODE_KEY, value);
 
+export const getExchangeRate = () => parseFloat(localStorage.getItem("app_exchange_rate")) || 655;
+export const setExchangeRate = (rate) => localStorage.setItem("app_exchange_rate", rate);

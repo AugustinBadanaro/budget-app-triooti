@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { getAutoBudgetSuggestions, createBudget } from "../services/transactions";
 import ErrorBanner from "../components/ErrorBanner";
+import { getAutoBudgetSuggestions, createBudget, updateProfile } from "../services/transactions";
 
 export default function AutoBudget({ month, budgets, categories, onBudgetsCreated }) {
 const [income, setIncome] = useState("");
@@ -48,23 +48,23 @@ const [calculating, setCalculating] = useState(false);
     return;
   }
     setSaving(true);
-    setValidated(true);
-    setError("");
-    try {
-      const created = await Promise.all(
-        suggestions.map((s) =>
-          createBudget({
-            category: s.category_id,
-            limit_amount: parseFloat(s.suggested_amount),
-            month: `${month}-01`,
-          })
-        )
-      );
-      onBudgetsCreated(created);
-
-      setSuggestions([]);
-      setIncome("");
-    } catch (err) {
+      setValidated(true);
+      setError("");
+      try {
+        await updateProfile({ monthly_income: parseFloat(income) });
+        const created = await Promise.all(
+          suggestions.map((s) =>
+            createBudget({
+              category: s.category_id,
+              limit_amount: parseFloat(s.suggested_amount),
+              month: `${month}-01`,
+            })
+          )
+        );
+        onBudgetsCreated(created);
+        setSuggestions([]);
+        setIncome("");
+      } catch (err) {
         setError(err.response?.data?.detail || "Erreur lors de l'enregistrement des budgets");
       } finally {
         setSaving(false);

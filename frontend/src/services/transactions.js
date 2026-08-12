@@ -17,3 +17,5 @@ export const createCategory = (data) => api.post("categories/", data).then((r) =
 export const deleteCategory = (id) => api.delete(`categories/${id}/`);
 
 export const getProfile = () => api.get("profile/").then((r) => r.data);
+
+export const updateProfile = (data) => api.patch("profile/", data).then((r) => r.data);

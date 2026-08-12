@@ -3,12 +3,13 @@ import { useState } from "react";
 import CategoryManager from "../components/CategoryManager";
 import ErrorBanner from "../components/ErrorBanner";
 import { exportToExcel, exportToPDF } from "../services/export";
-import { getCurrency, setCurrency as saveCurrency, getAlertThreshold, setAlertThreshold, getDarkMode, setDarkMode } from "../services/settings";
+import { getCurrency, setCurrency as saveCurrency, getExchangeRate, setExchangeRate, getAlertThreshold, setAlertThreshold, getDarkMode, setDarkMode } from "../services/settings";
 
 export default function Settings() {
   const { categories, setCategories, transactions, budgets, setBudgets, selectedMonth } = useOutletContext();
 
   const [currency, setCurrencyState] = useState(getCurrency());
+  const [exchangeRate, setExchangeRateState] = useState(getExchangeRate());
   const [threshold, setThreshold] = useState(getAlertThreshold());
   const [darkMode, setDarkModeState] = useState(getDarkMode());
   const [exportError, setExportError] = useState(null);
@@ -19,6 +20,11 @@ export default function Settings() {
     setCurrencyState(value);
     saveCurrency(value);
   };
+
+  const handleRateChange = (value) => {
+    setExchangeRateState(value);
+    setExchangeRate(value);
+};
 
   const handleThresholdChange = (value) => {
     setThreshold(Number(value));
@@ -145,6 +151,20 @@ export default function Settings() {
             <option value="USD">Dollar (USD)</option>
             <option value="GHS">Cedi (GHS)</option>
           </select>
+
+          {currency !== "XOF" && (
+            <div className="field" style={{ marginTop: 12 }}>
+              <label>1 {currency} = {exchangeRate} FCFA</label>
+              <input
+                type="number"
+                step="1"
+                min="1"
+                value={exchangeRate}
+                onChange={(e) => handleRateChange(e.target.value)}
+                placeholder="Ex : 655"
+              />
+            </div>
+          )}
         </div>
 
         <div className="card">
