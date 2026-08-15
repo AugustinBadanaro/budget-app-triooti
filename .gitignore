@@ -12,3 +12,5 @@ build/
 # Divers
 .vscode/
 .DS_Store
+
+frontend/.env.production
