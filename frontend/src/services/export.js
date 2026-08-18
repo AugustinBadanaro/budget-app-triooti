@@ -9,7 +9,7 @@ export const exportToExcel = (transactions, categories) => {
   const rows = transactions.map((t) => ({
     Date: t.date,
     Catégorie: getCategoryName(t.category),
-    Type: t.type === "income" ? "Revenu" : "Dépense",
+    "Dépense",
     Montant: parseFloat(t.amount),
     Description: t.description || "",
   }));
@@ -32,7 +32,7 @@ export const exportToPDF = (transactions, categories) => {
     body: transactions.map((t) => [
       t.date,
       getCategoryName(t.category),
-      t.type === "income" ? "Revenu" : "Dépense",
+      "Dépense",
       `${t.amount} F`,
       t.description || "",
     ]),
