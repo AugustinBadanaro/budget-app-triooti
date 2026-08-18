@@ -71,6 +71,12 @@ const [calculating, setCalculating] = useState(false);
       }
     };
 
+    const groupLabels = {
+      essential: "Essentiel",
+      variable: "Variable",
+      savings: "Épargne",
+    };
+
     return (
     <div>
       <h3>Répartition automatique du revenu</h3>
@@ -94,39 +100,44 @@ const [calculating, setCalculating] = useState(false);
 
       {suggestions.length > 0 && (
         <div>
-          <table border="1" cellPadding="6" style={{ borderCollapse: "collapse" }}>
-            <thead>
-              <tr>
-                <th>Catégorie</th>
-                <th>Groupe</th>
-                <th>Montant proposé</th>
-              </tr>
-            </thead>
-            <tbody>
-              {suggestions.map((s) => (
-                <tr key={s.category_id}>
-                  <td>{s.category_name}</td>
-                  <td>{s.group}</td>
-                  <td>
+          {suggestions.length > 0 && (
+            <div>
+              <div style={{ display: "grid", gap: 10, marginBottom: 14 }}>
+                {suggestions.map((s) => (
+                  <div
+                    key={s.category_id}
+                    className="card"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: 14,
+                      padding: "12px 16px",
+                    }}
+                  >
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 600, fontSize: 13.5 }}>{s.category_name}</div>
+                      <div style={{ fontSize: 11.5, color: "var(--slate)" }}>{groupLabels[s.group] || s.group}</div>
+                    </div>
                     <input
                       type="number"
                       step="0.01"
                       value={s.suggested_amount}
                       onChange={(e) => handleAmountChange(s.category_id, e.target.value)}
+                      style={{ width: 130, textAlign: "right" }}
                     />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <button
-            className="btn-primary"
-            onClick={handleValidate}
-            disabled={saving || validated}
-            style={{ marginTop: 14 }}
-          >
-            {saving ? "Enregistrement..." : "Valider et créer les budgets"}
-          </button>
+                  </div>
+                ))}
+              </div>
+              <button
+                className="btn-primary"
+                onClick={handleValidate}
+                disabled={saving || validated}
+              >
+                {saving ? "Enregistrement..." : "Valider et créer les budgets"}
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

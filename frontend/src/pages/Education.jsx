@@ -14,7 +14,7 @@ export default function Education() {
     },
     {
       title: "Lire vos indicateurs (KPI)",
-      text: "Le tableau de bord ne se contente pas d'additionner vos dépenses, il vous donne une lecture de tendance : le taux d'épargne montre la part de votre revenu réellement mise de côté ce mois-ci, la projection estime où vous serez en fin de mois si votre rythme de dépense actuel continue, et le respect des budgets pointe les catégories où vous risquez un dépassement avant qu'il n'arrive.",
+      text: "Le tableau de bord vous donne une lecture de tendance : le taux d'épargne montre la part de votre revenu réellement mise de côté ce mois-ci, la projection estime où vous serez en fin de mois si votre rythme de dépense actuel continue, et le respect des budgets pointe les catégories où vous risquez un dépassement avant qu'il n'arrive.",
     },
     {
       title: "Pourquoi certaines dépenses sont difficiles à réduire",
