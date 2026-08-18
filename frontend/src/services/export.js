@@ -9,7 +9,7 @@ export const exportToExcel = (transactions, categories) => {
   const rows = transactions.map((t) => ({
     Date: t.date,
     Catégorie: getCategoryName(t.category),
-    "Dépense",
+    Type: "Dépense",
     Montant: parseFloat(t.amount),
     Description: t.description || "",
   }));

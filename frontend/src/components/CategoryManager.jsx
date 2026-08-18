@@ -61,7 +61,7 @@ export default function CategoryManager({ categories, onCategoriesChange, select
       <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
         {categories.map((c) => (
           <li key={c.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid var(--line)" }}>
-            <span>{c.name} ({c.group})</span>
+            <span>{c.name}</span>
             <button className="btn-ghost" onClick={() => handleDelete(c.id, c.name)}>
               Supprimer
             </button>
