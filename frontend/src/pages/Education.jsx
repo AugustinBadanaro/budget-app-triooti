@@ -32,7 +32,7 @@ export default function Education() {
 
   return (
     <div>
-      <h2>Education financière</h2>
+      <h2>Aide</h2>
       <div style={{ fontSize: 12.3, color: "var(--slate)", marginBottom: 20 }}>
         Quelques repères pour mieux comprendre vos finances et tirer parti de Budgetly
       </div>

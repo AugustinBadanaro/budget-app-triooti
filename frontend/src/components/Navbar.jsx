@@ -69,7 +69,7 @@ export default function Navbar() {
         <NavLink to="/transactions" style={linkStyle}>Transactions</NavLink>
         <NavLink to="/budgets" style={linkStyle}>Budgets</NavLink>
         <NavLink to="/settings" style={linkStyle}>Paramètres</NavLink>
-        <NavLink to="/education" style={linkStyle}>Education</NavLink>
+        <NavLink to="/education" style={linkStyle}>Aide</NavLink>
       </div>
     </nav>
   );
