@@ -89,3 +89,14 @@ ul::-webkit-scrollbar-thumb {
 ul::-webkit-scrollbar-track {
   background: transparent;
 }
+
+.card{transition: transform .18s ease, box-shadow .18s ease;}
+.card:hover{transform: translateY(-2px); box-shadow: 0 4px 8px rgba(36,28,36,.06), 0 14px 30px -12px rgba(36,28,36,.14);}
+
+.btn-primary, .btn-ghost{transition: transform .15s ease, box-shadow .15s ease, background .15s ease;}
+.btn-primary:hover{transform: translateY(-1px); box-shadow: 0 6px 16px -4px rgba(214,51,108,.55);}
+.btn-ghost:hover{transform: translateY(-1px);}
+.btn-primary:active, .btn-ghost:active{transform: translateY(0);}
+
+input, select{transition: border-color .15s ease, box-shadow .15s ease;}
+input:focus, select:focus{box-shadow: 0 0 0 3px var(--rose-soft);}
