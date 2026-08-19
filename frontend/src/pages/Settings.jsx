@@ -97,7 +97,7 @@ export default function Settings() {
     <div>
       <h2>Paramètres</h2>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginTop: 20 }}>
+      <div className="grid-responsive" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginTop: 20 }}>
         <div className="card">
           <h3 style={{ fontSize: 14.5, marginBottom: 4, fontWeight: 600 }}>Catégories personnalisées</h3>
           <div style={{ fontSize: 12.3, color: "var(--slate)", marginBottom: 16 }}>

@@ -27,7 +27,7 @@ export default function Dashboard() {
         monthlyIncome={monthlyIncome}
       />
 
-      <div style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 20, marginTop: 20, alignItems: "start" }}>
+      <div className="grid-responsive" style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 20, marginTop: 20, alignItems: "start" }}>
         <ExpenseChart transactions={filtered} categories={categories} />
 
         <div className="card">

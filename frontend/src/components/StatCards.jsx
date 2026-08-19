@@ -31,6 +31,7 @@ export default function StatCards({ transactions, monthlyIncome }) {
 
   return (
     <div
+      className="grid-responsive"
       style={{
         display: "grid",
         gridTemplateColumns: "1.3fr 1fr 1fr",

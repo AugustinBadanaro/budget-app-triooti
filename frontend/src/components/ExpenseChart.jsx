@@ -36,7 +36,17 @@ export default function ExpenseChart({ transactions, categories }) {
   return (
     <div style={{ maxWidth: "350px" }}>
       <h3>Dépenses par catégorie</h3>
-      <Doughnut data={data} />
+      <Doughnut
+        data={data}
+        options={{
+          animation: {
+            animateRotate: true,
+            animateScale: true,
+            duration: 900,
+            easing: "easeOutQuart",
+          },
+        }}
+      />
     </div>
   );
 }

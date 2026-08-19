@@ -49,7 +49,7 @@ export default function KpiPanel({ transactions, budgets, selectedMonth, categor
   const labelStyle = { fontSize: 11.5, color: "var(--slate)", fontWeight: 600 };
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 14, marginBottom: 22 }}>
+    <div className="grid-responsive" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 14, marginBottom: 22 }}>
       <div className="card" style={kpiStyle}>
         <div style={labelStyle}>Taux d'épargne</div>
         <div style={{ ...valueStyle, color: savingsRate >= 0 ? "var(--success)" : "var(--alert)" }}>
