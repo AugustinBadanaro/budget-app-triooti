@@ -41,7 +41,25 @@ export default function TransactionForm({ categories, onTransactionAdded, select
       <h3>Nouvelle dépense</h3>
 
       {formError && <ErrorBanner message={formError} />}
-      {statusMessage && <p style={{ color: "orange" }}>{statusMessage}</p>}
+      {statusMessage && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            padding: "12px 16px",
+            borderRadius: 10,
+            background: "var(--alert-soft)",
+            border: "1.5px solid var(--alert)",
+            color: "var(--alert)",
+            fontWeight: 600,
+            fontSize: 13.5,
+          }}
+        >
+          <span style={{ fontSize: 18 }}>⚠️</span>
+          {statusMessage}
+        </div>
+      )}
 
       <div className="field">
         <label>Jour du mois</label>
