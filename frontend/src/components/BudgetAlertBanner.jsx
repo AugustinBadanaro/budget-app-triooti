@@ -27,21 +27,26 @@ export default function BudgetAlertBanner({ budgets, categories, transactions, s
 
   if (alerts.length === 0) return null;
 
-  return (
+    return (
     <div
       style={{
         background: "var(--alert-soft)",
-        border: "1px solid #F3C7B0",
+        border: "2px solid var(--alert)",
         color: "var(--alert)",
-        padding: "14px 18px",
+        padding: "16px 20px",
         borderRadius: 12,
-        fontSize: 13.3,
-        fontWeight: 600,
+        fontSize: 13.8,
+        fontWeight: 700,
         marginBottom: 22,
+        boxShadow: "0 4px 14px -4px rgba(194,65,12,.35)",
+        display: "flex",
+        flexDirection: "column",
+        gap: 8,
       }}
     >
       {alerts.map((b, i) => (
-        <div key={i}>
+        <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontSize: 18 }}>⚠️</span>
           {b.over
             ? `Budget "${b.name}" dépassé (${b.percentage.toFixed(0)}%)`
             : `Budget "${b.name}" a atteint ${b.percentage.toFixed(0)}% (seuil : ${threshold}%)`}
@@ -49,4 +54,5 @@ export default function BudgetAlertBanner({ budgets, categories, transactions, s
       ))}
     </div>
   );
+
 }
