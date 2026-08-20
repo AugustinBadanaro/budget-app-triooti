@@ -5,7 +5,7 @@ from django.db import models
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name', 'icon', 'color']
+        fields = ['id', 'name', 'icon', 'color', 'group']
 
 class TransactionSerializer(serializers.ModelSerializer):
     budget_status = serializers.SerializerMethodField()
