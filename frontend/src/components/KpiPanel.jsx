@@ -12,6 +12,7 @@ des dépenses totales, affichée en superposition sur ton graphique d'évolution
 Utile pour dire "en moyenne, tu dépenses X par mois" plutôt que des chiffres qui sautent.
 
 */
+import { formatAmount } from "../services/currency";
 
 export default function KpiPanel({ transactions, budgets, selectedMonth, categories, monthlyIncome }) {
   const filtered = transactions.filter((t) => t.date?.startsWith(selectedMonth));
@@ -62,11 +63,11 @@ export default function KpiPanel({ transactions, budgets, selectedMonth, categor
       </div>
       <div className="card" style={kpiStyle}>
         <div style={labelStyle}>Dépense moy./jour</div>
-        <div style={valueStyle}>{avgPerDay.toFixed(0)} F</div>
+        <div style={valueStyle}>{formatAmount(avgPerDay)}</div>
       </div>
       <div className="card" style={kpiStyle}>
         <div style={labelStyle}>Projection fin de mois</div>
-        <div style={valueStyle}>{projection.toFixed(0)} F</div>
+        <div style={valueStyle}>{formatAmount(projection)}</div>
       </div>
       <div className="card" style={kpiStyle}>
         <div style={labelStyle}>Catégorie top dépense</div>

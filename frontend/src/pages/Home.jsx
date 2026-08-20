@@ -1,7 +1,20 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Logo from "../components/Logo";
 
 export default function Home() {
+  const fullText = "Prenez le contrôle de vos finances. Suivez vos revenus, gérez vos dépenses et atteignez vos objectifs grâce à une gestion de budget simple, intelligente et efficace.";
+  const [typed, setTyped] = useState("");
+
+  useEffect(() => {
+    let i = 0;
+    const interval = setInterval(() => {
+      setTyped(fullText.slice(0, i + 1));
+      i++;
+      if (i >= fullText.length) clearInterval(interval);
+    }, 18);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <div
       style={{
@@ -67,9 +80,8 @@ export default function Home() {
             opacity: 0.92,
           }}
         >
-          Prenez le contrôle de vos finances. Suivez vos revenus,
-          gérez vos dépenses et atteignez vos objectifs grâce à une
-          gestion de budget simple, intelligente et efficace.
+          {typed}
+          <span style={{ borderRight: "2px solid #fff", marginLeft: 2, opacity: typed.length < fullText.length ? 1 : 0 }} />
         </p>
 
         <Link

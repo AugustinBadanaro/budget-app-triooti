@@ -87,10 +87,16 @@ export default function Settings() {
 
   const handleBudgetsRebalanced = (updatedBudgets) => {
     const updatedCategoryIds = updatedBudgets.map((b) => Number(b.category));
-    const kept = budgets.filter(
-      (b) => !(updatedCategoryIds.includes(Number(b.category)) && b.month?.startsWith(selectedMonth))
-    );
-    setBudgets([...kept, ...updatedBudgets]);
+    setBudgets((prev) => {
+      const kept = prev.filter(
+        (b) => !(updatedCategoryIds.includes(Number(b.category)) && b.month?.startsWith(selectedMonth))
+      );
+      return [...kept, ...updatedBudgets];
+    });
+  };
+
+  const handleCategoryDeleted = (categoryId) => {
+    setBudgets((prev) => prev.filter((b) => Number(b.category) !== Number(categoryId)));
   };
 
   return (
@@ -108,6 +114,7 @@ export default function Settings() {
             onCategoriesChange={setCategories}
             selectedMonth={selectedMonth}
             onBudgetsRebalanced={handleBudgetsRebalanced}
+            onCategoryDeleted={handleCategoryDeleted}
           />
         </div>
 

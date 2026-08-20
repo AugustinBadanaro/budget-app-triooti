@@ -1,4 +1,5 @@
 import { NavLink, useNavigate, Link } from "react-router-dom";
+import { LayoutDashboard, Receipt, Wallet, HelpCircle, Settings as SettingsIcon } from "lucide-react";
 import { logout } from "../services/auth";
 import Logo from "./Logo";
 
@@ -14,6 +15,8 @@ const navStyle = {
 };
 
 const linkStyle = ({ isActive }) => ({
+  display: "inline-flex",
+  alignItems: "center",
   padding: "9px 16px",
   borderRadius: "10px",
   fontSize: "13.8px",
@@ -65,11 +68,11 @@ export default function Navbar() {
       </div>
 
       <div className="navbar-links" style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
-        <NavLink to="/dashboard" style={linkStyle}>Tableau de bord</NavLink>
-        <NavLink to="/transactions" style={linkStyle}>Transactions</NavLink>
-        <NavLink to="/budgets" style={linkStyle}>Budgets</NavLink>
-        <NavLink to="/settings" style={linkStyle}>Paramètres</NavLink>
-        <NavLink to="/education" style={linkStyle}>Aide</NavLink>
+        <NavLink to="/dashboard" style={linkStyle}><LayoutDashboard size={16} style={{ marginRight: 6 }} />Tableau de bord</NavLink>
+        <NavLink to="/transactions" style={linkStyle}><Receipt size={16} style={{ marginRight: 6 }} />Transactions</NavLink>
+        <NavLink to="/budgets" style={linkStyle}><Wallet size={16} style={{ marginRight: 6 }} />Budgets</NavLink>
+        <NavLink to="/education" style={linkStyle}><HelpCircle size={16} style={{ marginRight: 6 }} />Aide</NavLink>
+        <NavLink to="/settings" style={linkStyle}><SettingsIcon size={16} style={{ marginRight: 6 }} />Paramètres</NavLink>
       </div>
     </nav>
   );

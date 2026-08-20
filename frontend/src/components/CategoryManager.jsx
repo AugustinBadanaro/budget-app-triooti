@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { createCategory, deleteCategory } from "../services/transactions";
-import { rebalanceGroup } from "../services/transactions";
+import { createCategory, deleteCategory, rebalanceGroup } from "../services/transactions";
 
-export default function CategoryManager({ categories, onCategoriesChange, selectedMonth, onBudgetsRebalanced }) {
+export default function CategoryManager({ categories, onCategoriesChange, selectedMonth, onBudgetsRebalanced, onCategoryDeleted }) {
   const [name, setName] = useState("");
   const [group, setGroup] = useState("essential");
   const [error, setError] = useState("");
@@ -18,24 +17,33 @@ export default function CategoryManager({ categories, onCategoriesChange, select
       try {
         const updatedBudgets = await rebalanceGroup(selectedMonth, group);
         onBudgetsRebalanced(updatedBudgets);
-      } catch {
-        // Pas de revenu enregistré encore : catégorie créée sans budget associé, ce n'est pas bloquant.
+      } catch (err) {
+        console.error("Rebalance échoué :", err.response?.data || err.message);
       }
     } catch {
       setError("Erreur : nom déjà utilisé ou invalide");
     }
   };
 
-  const handleDelete = async (id, name) => {
+  const handleDelete = async (id, name, categoryGroup) => {
     const confirmMsg = `Supprimer la catégorie "${name}" ? Toutes les transactions et tous les budgets associés à cette catégorie seront définitivement supprimés. Cette action est irréversible.`;
     if (!window.confirm(confirmMsg)) return;
     try {
       await deleteCategory(id);
       onCategoriesChange(categories.filter((c) => c.id !== id));
+      onCategoryDeleted(id);
+
+      try {
+        const updatedBudgets = await rebalanceGroup(selectedMonth, categoryGroup);
+        onBudgetsRebalanced(updatedBudgets);
+      } catch (err) {
+        console.error("Rebalance après suppression échoué :", err.response?.data || err.message);
+      }
     } catch {
       alert("Erreur lors de la suppression de la catégorie.");
     }
   };
+
   return (
     <div>
       <h3>Catégories</h3>
@@ -62,7 +70,7 @@ export default function CategoryManager({ categories, onCategoriesChange, select
         {categories.map((c) => (
           <li key={c.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid var(--line)" }}>
             <span>{c.name}</span>
-            <button className="btn-ghost" onClick={() => handleDelete(c.id, c.name)}>
+            <button className="btn-ghost" onClick={() => handleDelete(c.id, c.name, c.group)}>
               Supprimer
             </button>
           </li>
